@@ -77,6 +77,7 @@ const Fakestackoverflow = () => {
                 tagId={tagId}
                 setTagId={updateTagId}
                 setTagName={updateTagName}
+                tagName={tagName}
                 />
         </div>
     </div>
