@@ -11,9 +11,13 @@ const Fakestackoverflow = () => {
   const [currentSearch, setCurrentSearch] = useState({tagSearch: false, search: ''});
   const [currentQstnArray, setQstnArray] = useState([]);
   const [tagId, setTagId] = useState('');
+  const [tagName, setTagName] = useState('');
 
   const updateTagId = (tagId) => {
     setTagId(tagId);
+  };
+  const updateTagName = (tagName) => {
+    setTagName(tagName);
   };
 
   const updateQstnArray = (array) => {
@@ -72,6 +76,8 @@ const Fakestackoverflow = () => {
                 setCurrentSearch={setCurrentSearch}
                 tagId={tagId}
                 setTagId={updateTagId}
+                setTagName={updateTagName}
+                tagName={tagName}
                 />
         </div>
     </div>
