@@ -1,0 +1,14 @@
+
+
+.error {
+    display: block;
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.quest {
+    text-align: center;
+}
