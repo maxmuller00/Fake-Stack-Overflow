@@ -10,16 +10,13 @@ import SearchList from "./searchList";
 import TagHeader from "./tagHeader.js";
 import axios from 'axios';
 
-const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId}) => {
+const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId,tagName,setTagName}) => {
   /*const [currentQstnArray, setQstnArray] = useState(model.getAllQstns())
 
   const updateQstnArray = (array) => {
     setQstnArray(array);
   }*/
-  async function getTagById(tag_Id) {
-    const response = await axios.get(`http://localhost:8000/posts/tags/${tag_Id}`);
-    return response.data;
-  }
+
 
 
   return (
@@ -68,7 +65,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
       {currentPage === "tagQuestions" && (
         <TagHeader
           qarray={currentQstnArray} 
-          tag={getTagById(tagId)}
+          tag={tagName}
           setPage={updatePage}
         />
       )}
@@ -106,6 +103,8 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updateQstnArray={setQstnArray}
           currentQstnArray={currentQstnArray}
           setTagId={setTagId}
+          setTagName={setTagName}
+            
         />
       )}
     </div>
