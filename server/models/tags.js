@@ -1,18 +1,23 @@
 // Tag Document Schema
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
 
-const TagSchema = new mongoose.Schema({
-  name: {type : String, default : "defaultName"},
-  numQ : {type : Number, default : 0},
-});
+let TagSchema = new Schema(
+    {
+        name : {type: String , unique: true, required: true},
+        created_By : { type: Schema.Types.ObjectId, ref: 'User', required: true},
+        numQ : {type : Number, default : 0},
+    }
+);
 
+// Virtual for Answer's URL
 TagSchema
 .virtual('url')
 .get(function () {
   return 'posts/tag/_id/' + this._id;
 });
 
-
+//Export model
 module.exports = mongoose.model('Tag', TagSchema);
+
