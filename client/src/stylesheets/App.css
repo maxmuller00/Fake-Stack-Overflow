@@ -1,1 +1,191 @@
 /* Add your CSS here */
+.headerDiv {
+    background-color: lightgrey;
+    text-align: center;
+    height: 100px;
+    border-style: solid;   
+    overflow: hidden;
+}
+
+
+.headerDiv input[type=text] {
+    position: absolute;
+    right: 50px;
+    top: 40px;
+    font-size: 20px;
+  }
+
+.mainContent {
+    display: flex;
+    height: 100%;
+}
+
+.sideNav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-right: dotted;
+    height: 100vh;
+}
+
+.sideNav button{
+    color: blue;
+    background-color: white;
+    border: none;
+    height: 50px;
+    font-size: large;
+  }
+
+  .sideNav button:hover {
+    background-color: lightgrey;
+  }
+
+  .main {
+    flex: 4;
+  }
+
+  .questionHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: dotted;
+  }
+
+  .numQ-questions {
+    margin: 5px;
+  }
+
+  .filters button {
+    background-color: white;
+    border: solid black;
+  }
+
+  .filters button:hover {
+    background-color: lightgray;
+    border-style: inset;
+  }
+
+  .askQ {
+    font-size: 20px;
+    background-color: royalblue;
+    color: white;
+  }
+
+
+  .flexDiv {
+    display: flex;
+    justify-content: space-evenly;
+    border-bottom: dotted;
+  }
+
+  .flexDivTop {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: none;
+    align-content: space-around;
+  }
+
+  .qTitle {
+    background: none;
+    border: none;
+    color: blue;
+    font-size: medium;
+  }
+
+  .qTitle:hover {
+    color: darkblue;
+  }
+
+  .tagsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .tagP {
+    background-color: gray;
+    color: white;
+    border-radius: 5%;
+    padding: 1%;
+    margin: auto;
+    border: solid black;
+  }
+
+  .tagHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-;
+    border-bottom: dotted;
+  }
+
+  .numTags {
+    margin: auto 10vw;
+  }
+
+  .allTags {
+    margin: auto 10vw;
+  }
+
+  .askQDiv {
+    margin: auto 10vw;
+  }
+
+  .answerDiv {
+    margin: 1vh;
+  }
+
+  .titleDiv {
+    margin: 1vh;
+  }
+
+  .viewDiv {
+    margin: auto 20px;
+  }
+
+  .textDiv {
+    margin: auto 20px;
+    overflow: auto;
+  }
+
+  .textDiv2 {
+    margin: auto 20px;
+  }
+
+  .askedByDiv {
+    margin: auto 20px;
+  }
+
+  .answerBtn {
+    font-size: 20px;
+    background-color: royalblue;
+    color: white;
+    height: 5vh;
+    width: 10vw;
+  }
+
+  #post {
+    font-size: 20px;
+    background-color: royalblue;
+    color: white;
+    height: 4vh;
+    width: 10vw;
+    margin: 1vh;
+  }
+
+  .answerForm {
+    text-align: center;
+  }
+
+  .tagFlexDiv {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Create 3 equal columns */
+    gap: 10px; /* Adjust the gap as needed for spacing between divs */
+  }
+  
+  .uniqueTags {
+    width: calc(33.33% - 10px); /* Each div takes 1/3 of the container width with a little margin. */
+    margin: auto; /* Add some margin for spacing between divs. You can adjust this as needed. */
+    border: dotted; /* Optional: Add borders to the divs for visual separation. */
+    text-align: center;
+  }
