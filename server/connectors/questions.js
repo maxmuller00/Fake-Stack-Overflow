@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const Question = require('../models/questions');
-const Tag = require('../models/tags');
-const Answer = require('../models/answers');
+const Questions = require('../models/questions');
+const Tags = require('../models/tags');
+const Answers = require('../models/answers');
+const Users = require('../models/users');
+const Comments = require('../models/comments');
+
+const auth = require('../middleware/auth');
+
 
 async function searchByString(searchWords) {
   let results = [];
