@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const Questions = require('../models/questions');
-const Tags = require('../models/tags');
 const Answers = require('../models/answers');
+const Users = require('../models/users');
+const Comments = require('../models/comments');
+
+const auth = require('../middleware/auth');
+
 
 async function getAnswerById(id){
     try{
