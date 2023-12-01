@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios'
 
-const Questionheader = ({qarray, updateQstnArray, currentPage, setPage}) => {
+const Questionheader = ({qarray, updateQstnArray, currentPage, setPage, sessionId}) => {
 
   const handleClick = (filter) => {
     if(filter === 'newest'){
@@ -27,7 +27,12 @@ const Questionheader = ({qarray, updateQstnArray, currentPage, setPage}) => {
       <p>{qarray.length} Questions</p>
     </div>
     <div className="buttonsDiv">
-      <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
+      {sessionId != "guest" && (
+        <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
+      )}
+      {sessionId == "guest" && (
+        <button className="loginButton" onClick={()=>setPage("login")}>Login</button>
+      )}
       <div className='filters'>
         <button className="filterBtn" onClick={()=>handleClick('newest')}>Newest</button>
         <button className="filterBtn" onClick={()=>handleClick('unanswered')}>Unanswered</button>
