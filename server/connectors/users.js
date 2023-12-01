@@ -50,7 +50,7 @@ router.post('/addUser', async (req, res) => {
             isAdmin: userFound.isAdmin,
           };
           req.session.user = sessionUser;
-          res.send('success');
+          res.send(req.session.user);
           return;
         } else {
           res.send('Incorrect password. Please try again.');
