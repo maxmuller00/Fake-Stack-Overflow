@@ -10,6 +10,7 @@ let AnswerSchema = new Schema(
         ans_date_time : {type: Date , default: Date.now},
         votes: {type: Number , default: 0},
         comments: { type: [Schema.Types.ObjectId], ref: 'Comment' },
+        question: { type: Schema.Types.ObjectId, ref: 'Question' },
         voters: [{
           userVoted: { type: Schema.Types.ObjectId, ref: 'User'},
           amount: { type: Number, default: 0},
