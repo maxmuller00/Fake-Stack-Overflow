@@ -8,7 +8,7 @@ let UserSchema = new Schema( {
     password: {type: String, required: true},
     isAdmin: {type: Boolean, default: false},
     created_at: {type: Date, default: new Date},
-    comments: { type: [Schema.Types.ObjectId], ref: 'Comment' },
+    taga: { type: [Schema.Types.ObjectId], ref: 'Tag' },
     answers: { type: [Schema.Types.ObjectId], ref: 'Answer' },
     questions: { type: [Schema.Types.ObjectId], ref: 'Question' },
     reputation: {type: Number, default: 0}
