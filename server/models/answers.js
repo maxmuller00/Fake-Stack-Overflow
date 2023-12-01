@@ -12,7 +12,7 @@ let AnswerSchema = new Schema(
         comments: { type: [Schema.Types.ObjectId], ref: 'Comment' },
         voters: [{
           userVoted: { type: Schema.Types.ObjectId, ref: 'User'},
-          direction: { type: Number, default: 0},
+          amount: { type: Number, default: 0},
         }]
     }
 );
