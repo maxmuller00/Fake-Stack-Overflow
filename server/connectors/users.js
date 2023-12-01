@@ -9,11 +9,11 @@ const Question = require('../models/questions');
 const Comment = require('../models/comments');
 const Tag = require('../models/tags');
 
-router.post('/signUp', async (req, res) => {
+router.post('/register', async (req, res) => {
   let newUser = req.body;
   try {
-    const emailFound = await User.findOne({ email: newUser.email }).exec();
-    if (emailFound) {
+    const emailExists = await User.findOne({ email: newUser.email }).exec();
+    if (emailExists) {
       res.send('A user account associated with that email address has already been created.');
       return;
     }
@@ -32,7 +32,7 @@ router.post('/signUp', async (req, res) => {
   }
 });
 
-router.post('/logIn', async (req, res) => {
+router.post('/addUser', async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   try {
@@ -71,7 +71,7 @@ router.post('/logIn', async (req, res) => {
   }
 });
 
-// Route to check if the user's session is active
+// Route to check if the user's session is still active
 router.get('/session', (req, res) => {
   res.send(req.session.user);
 });
@@ -117,7 +117,7 @@ router.get('/getUserData/:id', async (req, res) => {
 
 router.delete('/deleteUser/:id', async (req, res) => {
   if (!req.session.user.isAdmin) {
-    res.send('You do not have permission to delete users.');
+    res.send('You do not have authority to delete users.');
     return;
   }
 
