@@ -11,6 +11,11 @@ const sidenav = ({currentPage, updatePage, currentQstnArray, setQstnArray, sessi
     updatePage(page);
   }
 
+  const handleLogout = () => {
+    setSessionId = "guest";
+    updatePage("welcome");
+  }
+
   return (
     <div className='sideNav'>
         <button className='questionSideNav' onClick={()=>handleClick('allQuestions')}>Questions</button>
@@ -18,6 +23,9 @@ const sidenav = ({currentPage, updatePage, currentQstnArray, setQstnArray, sessi
         {sessionId != "guest" && (
           <button className='userSideNav' onClick={()=>updatePage('userProfile')}>{/*Grab username from session Id */}
            USERNAME</button>
+        )}
+        {sessionId != "guest" && (
+          <button className='logoutSideNav' onClick={handleLogout}>Log Out</button>
         )}
     </div>
 
