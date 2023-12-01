@@ -64,6 +64,7 @@ router.post('/answerQuestion', async (req, res) => {
       const newAnswer = new Answers({
         text: newAnswerInput.text,
         ans_by: newAnswerInput.ans_by,
+        question: newAnswerInput.qid,
       });
       await newAnswer.save();
   
