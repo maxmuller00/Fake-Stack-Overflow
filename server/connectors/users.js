@@ -32,7 +32,7 @@ router.post('/signUp', async (req, res) => {
   }
 });
 
-router.post('/logIn', async (req, res) => {
+router.post('/addUser', async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   try {
@@ -72,7 +72,7 @@ router.post('/logIn', async (req, res) => {
 });
 
 // Route to check if the user's session is active
-router.get('/session', (req, res) => {
+router.get('/isActive', (req, res) => {
   res.send(req.session.user);
 });
 
