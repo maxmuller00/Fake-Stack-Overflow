@@ -77,6 +77,7 @@ router.post('/answerQuestion', async (req, res) => {
   
       if (question) {
         question.answers.push(newAnswer._id);
+        user.answers.push(newAnswer._id);
         await question.save();
         res.send(question);
       } else {
