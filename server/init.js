@@ -7,11 +7,9 @@ const bcrypt = require('bcrypt');
 let userArgs = process.argv.slice(2);
 
 if (userArgs.length < 2) {
-  throw new Error('Must provide 2 Arguments: an email address and password for Admin.');
+  throw new Error('Please provide 2 Arguments');
 }
 
-// let username = userArgs[0];
-// let password = userArgs[1];
 
 let Tag = require('./models/tags');
 let Answer = require('./models/answers');
@@ -90,8 +88,6 @@ const keywords = [
   'HTML',
   'CSS',
   'JavaScript',
-  'React',
-  'Webpack',
   'Git',
   'Testing',
   'Debugging',
@@ -99,6 +95,11 @@ const keywords = [
   'UI/UX',
   'Design',
   'CSE316',
+  'React',
+  'Webpack',
+  'MongoDB',
+  'SQL',
+  
 ];
 const randomIndex = (list) => Math.floor(Math.random() * list.length);
 const randomWord = (li) => li[randomIndex(li)];
@@ -125,16 +126,16 @@ const populate = async () => {
   }
 
   // Create 5 Tags
-  const tagss = [];
+  const tags_0 = [];
   for (let i = 0; i < 5; i++) {
     let tag = await tagCreate(`tag${i}`, users[i % 3]);
-    tagss.push(tag);
+    tags_0.push(tag);
   }
 
   function randomUniqueTags() {
     const tags = [];
     while (tags.length < 3) {
-      const tag = randomWord(tagss);
+      const tag = randomWord(tags_0);
       if (!tags.includes(tag)) {
         tags.push(tag);
       }
@@ -152,7 +153,7 @@ const populate = async () => {
     comments.push(comment);
   }
 
-  async function comCreateMany() {
+  async function commmentCreate() {
     const comments = [];
     for (let i = 0; i < 4; i++) {
       const text = `Comment ${i} ${randomWord(keywords)} ${randomWord(keywords)} `;
@@ -172,7 +173,7 @@ const populate = async () => {
     const ans_by = randomWord(users);
     const ans_date_time = new Date();
     const votes = 0;
-    const comments_a = await comCreateMany();
+    const comments_a = await commmentCreate();
     const answer = await answerCreate(text, ans_by, ans_date_time, votes, comments_a);
     answers.push(answer);
   }
