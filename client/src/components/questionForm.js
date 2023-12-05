@@ -3,10 +3,11 @@ import '../stylesheets/questionForm.css';
 import validateLinks from '../helpers/validateLinks.js';
 import axios from 'axios'
 
-const Questionform = ({currentPage, setPage, updateQstnArray}) => {
+const Questionform = ({currentPage, setPage, updateQstnArray, sessionId}) => {
 
   const [questions, setQuestions] = useState([]);
   const [allTags, setAllTags] = useState([]);
+  //const user = axios.get()._id
   
 
   useEffect(() => {
@@ -37,7 +38,6 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
     title: '',
     text: '',
     tags: '',
-    username: '',
   });
 
   const [errors, setErrors] = useState({
@@ -47,7 +47,6 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
     tags2: false,
     tags3: false,
     link: false,
-    username: false, 
   })
 
   const handleInputChange = (event) => {
@@ -89,9 +88,6 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
     newErrors.tags3 = true;
     }
     }
-    if (formData.username.length === 0) {
-      newErrors.username = true;
-    }
 
 
     function createTag(tag){
@@ -127,7 +123,7 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
         title: formData.title,
         text: formData.text,
         tags: [],
-        asked_by : formData.username,
+        asked_by : user.username,
         ask_date_time: new Date(),
         answers: [],
         views: 0,
@@ -150,8 +146,6 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
           newQuestion.tags.push(newTag.name);
         }
       }
-
-      console.log("NEWQUESTION TAGS ",newQuestion.tags);
       
       axios
         .post('http://localhost:8000/posts/questions/askQuestion', newQuestion, {
@@ -196,9 +190,9 @@ const Questionform = ({currentPage, setPage, updateQstnArray}) => {
             <input type="text" name="tags" value={formData.tags} onChange={handleInputChange}></input>
 
 
-            <h1>Username*</h1>
+            {/*<h1>Username*</h1>
             <span id="error4" className={errors.username ? 'error' : 'hidden'}>Enter a username</span>
-            <input type="text" name="username" value={formData.username} onChange={handleInputChange}></input>
+            <input type="text" name="username" value={formData.username} onChange={handleInputChange}></input>*/}
 
             <br></br>
             <input id="post" type="submit" value="Post"></input>

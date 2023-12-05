@@ -6,18 +6,15 @@ import axios from 'axios'
 
 const Fakestackoverflow = () => {
 
-  const [currentPage, setCurrentPage] = useState("allQuestions");
+  const [currentPage, setCurrentPage] = useState("welcome");
   const [currentQ, setCurrentQ] = useState("");
   const [currentSearch, setCurrentSearch] = useState({tagSearch: false, search: ''});
   const [currentQstnArray, setQstnArray] = useState([]);
   const [tagId, setTagId] = useState('');
-  const [tagName, setTagName] = useState('');
+  const [sessionId, setSessionId] = useState("guest");
 
   const updateTagId = (tagId) => {
     setTagId(tagId);
-  };
-  const updateTagName = (tagName) => {
-    setTagName(tagName);
   };
 
   const updateQstnArray = (array) => {
@@ -76,8 +73,8 @@ const Fakestackoverflow = () => {
                 setCurrentSearch={setCurrentSearch}
                 tagId={tagId}
                 setTagId={updateTagId}
-                setTagName={updateTagName}
-                tagName={tagName}
+                sessionId={sessionId}
+                setSessionId={setSessionId}
                 />
         </div>
     </div>
