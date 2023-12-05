@@ -71,8 +71,10 @@ router.post('/addUser', async (req, res) => {
   }
 });
 
-// Route to check if the user's session is still active
-router.get('/session', (req, res) => {
+
+// Route to check if the user's session is active
+router.get('/isActive', (req, res) => {
+
   res.send(req.session.user);
 });
 
