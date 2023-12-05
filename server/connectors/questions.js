@@ -322,6 +322,7 @@ router.post('/askQuestion', async (req, res) => {
     const tagExists = await Tags.findOne({ name: tag }).exec();
     if (tagExists) {
       tagIds.push(tagExists._id);
+      Users.tags.push(tagExists._id);
     } else {
       try {
         const user = await Users.findOne({ _id: newQuestionInput.askedBy }).exec();
@@ -349,6 +350,7 @@ router.post('/askQuestion', async (req, res) => {
       asked_by: newQuestionInput.askedBy,
     });
     await newQuestion.save();
+    Users.questions.push(newQuestion._id);
     res.send(newQuestion);
   } catch (error) {
     console.error(error);

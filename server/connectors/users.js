@@ -9,11 +9,11 @@ const Question = require('../models/questions');
 const Comment = require('../models/comments');
 const Tag = require('../models/tags');
 
-router.post('/signUp', async (req, res) => {
+router.post('/register', async (req, res) => {
   let newUser = req.body;
   try {
-    const emailFound = await User.findOne({ email: newUser.email }).exec();
-    if (emailFound) {
+    const emailExists = await User.findOne({ email: newUser.email }).exec();
+    if (emailExists) {
       res.send('A user account associated with that email address has already been created.');
       return;
     }
@@ -50,7 +50,7 @@ router.post('/addUser', async (req, res) => {
             isAdmin: userFound.isAdmin,
           };
           req.session.user = sessionUser;
-          res.send('success');
+          res.send(req.session.user);
           return;
         } else {
           res.send('Incorrect password. Please try again.');
@@ -71,8 +71,10 @@ router.post('/addUser', async (req, res) => {
   }
 });
 
+
 // Route to check if the user's session is active
 router.get('/isActive', (req, res) => {
+
   res.send(req.session.user);
 });
 
@@ -117,7 +119,7 @@ router.get('/getUserData/:id', async (req, res) => {
 
 router.delete('/deleteUser/:id', async (req, res) => {
   if (!req.session.user.isAdmin) {
-    res.send('You do not have permission to delete users.');
+    res.send('You do not have authority to delete users.');
     return;
   }
 

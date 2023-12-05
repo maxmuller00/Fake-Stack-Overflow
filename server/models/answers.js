@@ -10,9 +10,10 @@ let AnswerSchema = new Schema(
         ans_date_time : {type: Date , default: Date.now},
         votes: {type: Number , default: 0},
         comments: { type: [Schema.Types.ObjectId], ref: 'Comment' },
+        qid: { type: Schema.Types.ObjectId, ref: 'Question' },
         voters: [{
           userVoted: { type: Schema.Types.ObjectId, ref: 'User'},
-          direction: { type: Number, default: 0},
+          amount: { type: Number, default: 0},
         }]
     }
 );
