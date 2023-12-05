@@ -22,6 +22,7 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
             {sessionId != "guest" && (
         <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
       )}
+      {/*if username === currentQ.askedBy enter a button here that will allow user to modify question */}
       {sessionId == "guest" && (
         <button className="loginButton" onClick={()=>setPage("login")}>Login</button>
       )}

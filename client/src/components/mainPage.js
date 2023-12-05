@@ -11,6 +11,8 @@ import TagHeader from "./tagHeader.js";
 import WelcomePage from "./welcomePage.js";
 import Register from "./register.js";
 import LoginPage from "./loginPage.js";
+import ModifyForm from "./modifyForm.js";
+import UserPage from "./userPage.js";
 import axios from 'axios';
 
 const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId}) => {
@@ -19,6 +21,9 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
     const response = await axios.get(`http://localhost:8000/posts/tags/${tag_Id}`);
     return response.data;
   }
+
+  const [entryType, setEntryType] = useState('');
+  const [entryId, setEntryId] = useState('');
 
 
   return (
@@ -129,6 +134,24 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updateQstnArray={setQstnArray}
           currentQstnArray={currentQstnArray}
           setTagId={setTagId}
+        />
+      )}
+
+      {currentPage === "modify" && (
+        <ModifyForm 
+          entryId={entryId}
+          type = {entryType}
+          setPage={updatePage}
+        />
+      )}
+
+      {currentPage === "userPage" && (
+        <UserPage 
+          setEntryId={setEntryId}
+          setEntryType={setEntryType}
+          updatePage={updatePage}
+          sessionId={sessionId}
+          setSessionId={setSessionId}
         />
       )}
     </div>
