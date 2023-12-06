@@ -6,7 +6,7 @@ const Answers = require('../models/answers');
 const Users = require('../models/users');
 const Comments = require('../models/comments');
 
-const auth = require('../middleware/auth');
+const auth = require('../auth');
 
 
 async function getAnswerById(id){
