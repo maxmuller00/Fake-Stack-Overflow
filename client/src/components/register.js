@@ -20,8 +20,8 @@ const Register = ({updatePage}) => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
+        setUserData({
+            ...userData,
             [name]: value,
         });
 
@@ -30,6 +30,8 @@ const Register = ({updatePage}) => {
             [name]: false,
         });
     };
+
+    let checkError = '';
 
     function validateEmailAndPassword(email, password, username) {
         // Email validation regex pattern
@@ -46,9 +48,6 @@ const Register = ({updatePage}) => {
         if (password.includes(username) || password.includes(email.split('@')[0])) {
           return false;
         }
-
-        //Check if email and/or username already exists in database
-        //implement here
         return true;
     }
 
@@ -92,8 +91,14 @@ const Register = ({updatePage}) => {
               password: userData.password,
             }
             //need route for adding user to db          
-            axios.post().then(() => {
-                setPage("login");
+            axios.post(`http://localhost:8000/posts/users/register`, newUser).then(response => {
+                const msg = response.data;
+                if(msg !== 'success'){
+                    checkError = "An account with these credentials already exists.";
+                }
+                else {
+                    updatePage("login");
+                }
             }).catch(error => {
                 console.error(error);
             })
@@ -119,7 +124,8 @@ const Register = ({updatePage}) => {
             <input id="post" type="submit" value="Register"></input>
             <span id="registerError" className={errors.register ? 'error' : 'hidden'}>Either the email you entered is not valid
             or the password contains the email Id or username</span>
-            <button onClick={handleClick}>Back to Welcome</button>
+            <span id="checkError">{checkError}</span>
+            <button onClick={() => handleClick}>Back to Welcome</button>
 
         </form>
     </div>

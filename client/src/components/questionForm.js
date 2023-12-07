@@ -3,7 +3,7 @@ import '../stylesheets/questionForm.css';
 import validateLinks from '../helpers/validateLinks.js';
 import axios from 'axios'
 
-const Questionform = ({currentPage, setPage, updateQstnArray, sessionId}) => {
+const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
 
   const [questions, setQuestions] = useState([]);
   const [allTags, setAllTags] = useState([]);
@@ -123,7 +123,7 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionId}) => {
         title: formData.title,
         text: formData.text,
         tags: [],
-        asked_by : user.username,
+        asked_by : sessionUser.username,
         ask_date_time: new Date(),
         answers: [],
         views: 0,

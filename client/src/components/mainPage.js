@@ -29,19 +29,19 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
   return (
     <div className="main">
 
-      {currentPage == "welcome" && (
+      {currentPage === "welcome" && (
         <WelcomePage 
           updatePage={updatePage}
         />
       )}
 
-      {currentPage == "login" && (
+      {currentPage === "register" && (
         <Register 
           updatePage={updatePage}
         />
       )}
 
-      {currentPage == "register" && (
+      {currentPage === "login" && (
         <LoginPage 
           updatePage={updatePage}
           setSessionId={setSessionId}
