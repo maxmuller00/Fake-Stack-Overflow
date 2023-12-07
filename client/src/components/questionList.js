@@ -7,27 +7,27 @@ import CreateTagForQuestion from '../helpers/createTagForQuestion.js'
 
 const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, setCurrentQ, model}) => {
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentCommentPage, setCurrentCommentPage] = useState(1);
   const questionsPerPage = 3;
 
   const totalPages = Math.ceil(qarray.length / questionsPerPage);
 
-  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfLastQuestion = currentCommentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questionArray.slice(
+  const currentQuestions = qarray.slice(
     indexOfFirstQuestion,
     indexOfLastQuestion
   );
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+      setCurrentCommentPage(currentPage + 1);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentCommentPage(currentPage - 1);
     }
   };
 

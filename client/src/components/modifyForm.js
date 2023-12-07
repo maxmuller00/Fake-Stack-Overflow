@@ -4,7 +4,20 @@ const ModifyForm = ({entryId, type, setPage}) => {
 
     //get entry by id and by type, grab currentText
 
-    const [newText, setNewText] = useState(currentText);
+    const [newText, setNewText] = useState('');
+    /*useEffect(() => {
+            if(type === 'Question'){
+                axios.get(`http://localhost:8000/posts/questions/${entryId}`).then(response => {
+                    setNewText(response.data.text);
+                });
+            } else if(type === 'Answer'){
+                axios.get(`http://localhost:8000/posts/answers/${entryId}`);
+            } else {
+                axios.get(`http://localhost:8000/posts/tags/${entryId}`);
+            }
+        });
+        fetchData();
+    }, [entryId, type]);*/
 
     const handleTextChange = (e) => {
         setNewText(e.target.value)

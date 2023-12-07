@@ -1,8 +1,9 @@
 import React, { useState, useEffect} from 'react'
+import axios from 'axios'
 
-const LoginPage = ({updatePage, setSessionId}) => {
+const LoginPage = ({updatePage, setSessionUser}) => {
 
-    const [loginData, setloginData] = useState({
+    const [loginData, setLoginData] = useState({
         email: '',
         password: '',
       });
@@ -14,8 +15,8 @@ const LoginPage = ({updatePage, setSessionId}) => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
+        setLoginData({
+            ...loginData,
             [name]: value,
         });
 
@@ -25,7 +26,11 @@ const LoginPage = ({updatePage, setSessionId}) => {
         });
     };
 
-    const handleClick = () => {
+    let loginError = '';
+
+
+    const handleClick = (event) => {
+        event.preventDefault();
         updatePage("welcome");
     }
 
@@ -51,13 +56,20 @@ const LoginPage = ({updatePage, setSessionId}) => {
             // If there are no errors, you can submit the form
             // and perform further actions here
             const newUser = {
-              email: userData.email,
-              password: userData.password,
+              email: loginData.email,
+              password: loginData.password,
             }
-            //need route for getting user info from db          
-            //axios.get('.../newUser)
-            setSessionId(user._id);
-            updatePage("allQuestions");
+            let user;
+            axios.post(`http://localhost:8000/posts/users/login`, newUser).then(response => {
+                user = response.data;
+                if(typeof(user) === 'string'){
+                    loginError = user;
+                }
+                else {
+                    setSessionUser(user);
+                    updatePage("allQuestions");
+                }
+            })
           }
     }
 
@@ -72,8 +84,8 @@ const LoginPage = ({updatePage, setSessionId}) => {
                 <span id="passwordError" className={errors.password ? 'error' : 'hidden'}>Password not filled in</span>
                 <input></input>
                 <input id="post" type="submit" value="Login"></input>
-                <span id="loginError" className={errors.login ? 'error' : 'hidden'}>The email or password you entered is invalid</span>
-                <button onClick={handleClick}>Back to Welcome</button>
+                <span id="loginError">{loginError}</span>
+                <button onClick={() => handleClick}>Back to Welcome</button>
     
             </form>
         </div>
