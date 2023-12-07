@@ -91,17 +91,22 @@ const Register = ({updatePage}) => {
               password: userData.password,
             }
             //need route for adding user to db          
-            axios.post(`http://localhost:8000/posts/users/register`, newUser).then(response => {
+            axios.post(`http://localhost:8000/users/register`, newUser)
+            .then(response => {
                 const msg = response.data;
-                if(msg !== 'success'){
-                    checkError = "An account with these credentials already exists.";
+                if (msg !== 'success') {
+                // Display an error message indicating account already exists
+                checkError = "An account with these credentials already exists.";
+                } else {
+                // If registration is successful, navigate to the login page
+                updatePage("login");
                 }
-                else {
-                    updatePage("login");
-                }
-            }).catch(error => {
-                console.error(error);
             })
+            .catch(error => {
+                // Display an error message for network/server issues
+                console.error("Error occurred while registering:", error);
+                checkError = "An error occurred during registration. Please try again later.";
+            });
           }
     }
 
@@ -111,21 +116,21 @@ const Register = ({updatePage}) => {
 
             <h1>Username</h1>
             <span id="usernameError" className={errors.username ? 'error' : 'hidden'}>Username not filled in</span>
-            <input></input>
+            <input type="text" name="username" value={userData.username} onChange={handleInputChange}></input>
             <h1>Email</h1>
             <span id="emailError" className={errors.email ? 'error' : 'hidden'}>Email not filled in</span>
-            <input></input>
+            <input type="text" name="email" value={userData.email} onChange={handleInputChange}></input>
             <h1>Password</h1>
             <span id="passwordError" className={errors.password ? 'error' : 'hidden'}>Password not filled in</span>
-            <input></input>
+            <input type="text" name="password" value={userData.password} onChange={handleInputChange}></input>
             <h1>Verify Password</h1>
             <span id="verPassError" className={errors.verPass ? 'error' : 'hidden'}>Password must match</span>
-            <input></input>
+            <input type="text" name="verPass" value={userData.verPass} onChange={handleInputChange}></input>
             <input id="post" type="submit" value="Register"></input>
             <span id="registerError" className={errors.register ? 'error' : 'hidden'}>Either the email you entered is not valid
             or the password contains the email Id or username</span>
             <span id="checkError">{checkError}</span>
-            <button onClick={() => handleClick}>Back to Welcome</button>
+            <button onClick={handleClick}>Back to Welcome</button>
 
         </form>
     </div>

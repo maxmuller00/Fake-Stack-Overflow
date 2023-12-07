@@ -11,7 +11,7 @@ const Fakestackoverflow = () => {
   const [currentSearch, setCurrentSearch] = useState({tagSearch: false, search: ''});
   const [currentQstnArray, setQstnArray] = useState([]);
   const [tagId, setTagId] = useState('');
-  const [sessionUser, setSessionUser] = useState("guest");
+  const [sessionUser, setSessionUser] = useState({loggedIn : false, admin : false});
 
   const updateTagId = (tagId) => {
     setTagId(tagId);
@@ -32,17 +32,16 @@ const Fakestackoverflow = () => {
     setCurrentQ(newQ);
   };  
 
-  {/*useEffect(() => {
+  useEffect(() => {
     // Fetch questions from the questions router
-    //axios.get('http://localhost:8000/posts/questions?sort=newest?tags=a,b,c,d?datestart=1234567?dateend=1234567.......')
-    axios.get('http://localhost:8000/posts/questions/newest')
+    axios.get(`http://localhost:8000/posts/questions/newest`)
       .then(response => {
         setQstnArray(response.data);
       })
       .catch(error => {
         console.error(error);
       });
-  }, []);*/}
+  }, []);
 
   return (
     <div className='fakeContainer'>
@@ -61,6 +60,8 @@ const Fakestackoverflow = () => {
                 updatePage={updatePage}
                 currentQstnArray={currentQstnArray}
                 setQstnArray={updateQstnArray}
+                sessionUser={sessionUser}
+                setSessionUser={setSessionUser}
             />
             <MainPage 
                 currentPage={currentPage} 

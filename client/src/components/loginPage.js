@@ -29,8 +29,8 @@ const LoginPage = ({updatePage, setSessionUser}) => {
     let loginError = '';
 
 
-    const handleClick = (event) => {
-        event.preventDefault();
+    const handleClick = () => {
+        console.log("Triggered");
         updatePage("welcome");
     }
 
@@ -60,8 +60,9 @@ const LoginPage = ({updatePage, setSessionUser}) => {
               password: loginData.password,
             }
             let user;
-            axios.post(`http://localhost:8000/posts/users/login`, newUser).then(response => {
+            axios.post(`http://localhost:8000/users/login`, newUser).then(response => {
                 user = response.data;
+                console.log(user);
                 if(typeof(user) === 'string'){
                     loginError = user;
                 }
@@ -79,15 +80,16 @@ const LoginPage = ({updatePage, setSessionUser}) => {
     
                 <h1>Email</h1>
                 <span id="emailError" className={errors.username ? 'error' : 'hidden'}>Email not filled in</span>
-                <input></input>
+                <input type="text" name="email" value={loginData.email} onChange={handleInputChange}></input>
                 <h1>Password</h1>
                 <span id="passwordError" className={errors.password ? 'error' : 'hidden'}>Password not filled in</span>
-                <input></input>
+                <input type="text" name="password" value={loginData.password} onChange={handleInputChange}></input>
                 <input id="post" type="submit" value="Login"></input>
                 <span id="loginError">{loginError}</span>
-                <button onClick={() => handleClick}>Back to Welcome</button>
-    
             </form>
+            <div>
+                <button onClick={handleClick}>Back to Welcome</button>
+            </div>
         </div>
       )
     }
