@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import TagsBox from './tagsBox'
 import axios from 'axios'
 
-const TagsPage = ({updatePage, setSearch, currentSearch, updateQstnArray, currentQstnArray, setTagId,setTagName}) => {
+const TagsPage = ({updatePage, setSearch, currentSearch, updateQstnArray, currentQstnArray, setTagId}) => {
   const [allTags, setAllTags] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const TagsPage = ({updatePage, setSearch, currentSearch, updateQstnArray, curren
             <div className='allTags'><h1>All Tags</h1></div>
             <div className='askQDiv'><button className='askQ' onClick={()=>updatePage('questionForm')}>Ask Question</button></div>
           </div>
-          <TagsBox updatePage={updatePage} setSearch={setSearch} tags={allTags} updateQstnArray={updateQstnArray} currentQstnArray={currentQstnArray} setTagId={setTagId} setTagName={setTagName} />
+          <TagsBox updatePage={updatePage} setSearch={setSearch} tags={allTags} updateQstnArray={updateQstnArray} currentQstnArray={currentQstnArray} setTagId={setTagId} />
         </div>
   );
 }

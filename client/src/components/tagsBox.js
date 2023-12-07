@@ -7,7 +7,6 @@ const TagsBox = ({
   updateQstnArray,
   currentQstnArray,
   setTagId,
-  setTagName,
 }) => {
 
 
@@ -38,7 +37,6 @@ const TagsBox = ({
       await axios.get(`http://localhost:8000/posts/questions/searchingTag/${element}`).then(response => {
         tagQuestions = response.data;
       });
-      setTagName(element);
       updateQstnArray(tagQuestions);
       updatePage(page);
     })()
@@ -88,7 +86,7 @@ const TagsBox = ({
                 id={tag._id}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleClick(tag.name, 'tagQuestions');
+                  handleClick(tag.name, 'searchQuestions');
                 }}
               >
                 {tag.name}

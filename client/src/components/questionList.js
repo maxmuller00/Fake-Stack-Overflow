@@ -7,6 +7,30 @@ import CreateTagForQuestion from '../helpers/createTagForQuestion.js'
 
 const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, setCurrentQ, model}) => {
 
+  const [currentCommentPage, setCurrentCommentPage] = useState(1);
+  const questionsPerPage = 3;
+
+  const totalPages = Math.ceil(qarray.length / questionsPerPage);
+
+  const indexOfLastQuestion = currentCommentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = qarray.slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentCommentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentCommentPage(currentPage - 1);
+    }
+  };
+
 
   const handleClick = (page, q) => {
     (async () => {
@@ -33,7 +57,7 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
   }
   return (
    <div className='questionDiv'>
-    {qarray.map((question) => (
+    {currentQuestions.map((question) => (
         <div key={question._id} className="flexDiv">
           <div className="viewDiv">
             <p>{question.answers.length} answers</p>
@@ -48,6 +72,15 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
           </div>
         </div>
     ))}
+    <div>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
    </div>
   );
 }

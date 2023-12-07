@@ -8,19 +8,46 @@ import TagsPage from "./tagsPage";
 import Searchheader from "./searchheader";
 import SearchList from "./searchList";
 import TagHeader from "./tagHeader.js";
+import WelcomePage from "./welcomePage.js";
+import Register from "./register.js";
+import LoginPage from "./loginPage.js";
+import ModifyForm from "./modifyForm.js";
+import UserPage from "./userPage.js";
 import axios from 'axios';
 
-const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId,tagName,setTagName}) => {
-  /*const [currentQstnArray, setQstnArray] = useState(model.getAllQstns())
+const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId}) => {
 
-  const updateQstnArray = (array) => {
-    setQstnArray(array);
-  }*/
+  async function getTagById(tag_Id) {
+    const response = await axios.get(`http://localhost:8000/posts/tags/${tag_Id}`);
+    return response.data;
+  }
 
+  const [entryType, setEntryType] = useState('');
+  const [entryId, setEntryId] = useState('');
 
 
   return (
     <div className="main">
+
+      {currentPage === "welcome" && (
+        <WelcomePage 
+          updatePage={updatePage}
+        />
+      )}
+
+      {currentPage === "register" && (
+        <Register 
+          updatePage={updatePage}
+        />
+      )}
+
+      {currentPage === "login" && (
+        <LoginPage 
+          updatePage={updatePage}
+          setSessionId={setSessionId}
+        />
+      )}
+
       {/*home display, shows all questions */}
       {currentPage === "allQuestions" && (
         <Questionheader
@@ -28,6 +55,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updateQstnArray={setQstnArray}
           currentPage={currentPage}
           setPage={updatePage} //changed from setCurrentPage
+          sessionId={sessionId}
         />
       )}
 
@@ -48,6 +76,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           currentPage={currentPage}
           setPage={updatePage} //changed from setCurrentPage
           tagId={tagId}
+          sessionId={sessionId}
         />
       )}
       {/*Search List */}
@@ -65,8 +94,9 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
       {currentPage === "tagQuestions" && (
         <TagHeader
           qarray={currentQstnArray} 
-          tag={tagName}
+          tag={getTagById(tagId)}
           setPage={updatePage}
+          sessionId={sessionId}
         />
       )}
 
@@ -92,6 +122,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           currentPage={currentPage}
           setPage={updatePage}
           currentQ={currentQ}
+          sessionId={sessionId}
         />
       )}
       {/*Tags Page*/}
@@ -103,8 +134,24 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updateQstnArray={setQstnArray}
           currentQstnArray={currentQstnArray}
           setTagId={setTagId}
-          setTagName={setTagName}
-            
+        />
+      )}
+
+      {currentPage === "modify" && (
+        <ModifyForm 
+          entryId={entryId}
+          type = {entryType}
+          setPage={updatePage}
+        />
+      )}
+
+      {currentPage === "userPage" && (
+        <UserPage 
+          setEntryId={setEntryId}
+          setEntryType={setEntryType}
+          updatePage={updatePage}
+          sessionId={sessionId}
+          setSessionId={setSessionId}
         />
       )}
     </div>

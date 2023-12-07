@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ}) => {
+const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ, sessionId}) => {
 
   const [question, setCurrentQuestion] = useState([]);
   const [allAnswers, setAllAnswers] = useState([]);
+  //const user = axios.get()
 
   useEffect(() => {
     console.log("CURRENT QUESTION ", currentQ);
@@ -30,12 +31,10 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ}) => {
 
   const [formData, setFormData] = useState({
     text: '',
-    username: '',
   });
 
   const [errors, setErrors] = useState({
     text: false,
-    username: false, 
   })
 
   const handleInputChange = (event) => {
@@ -56,9 +55,6 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ}) => {
     event.preventDefault();
 
     const newErrors = {}
-    if (formData.username.length === 0) {
-      newErrors.username = true;
-    }
     if (formData.text.length === 0) {
       newErrors.text = true;
     }
@@ -83,7 +79,7 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ}) => {
       const newAnswer = {
         qid : question._id,
         text: formData.text,
-        ans_by: formData.username,
+        ans_by: formData.username,//this needs to be changed
         ans_date_time: new Date(),
       }
       addAnswerAsync(newAnswer);
@@ -93,9 +89,9 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ}) => {
   return (
     <div className='answerFormDiv'>
       <form className='answerForm' onSubmit={handleSubmit}>
-        <h1>Username*</h1>
+        {/*<h1>Username*</h1>
         <span id="error5" className={errors.username ? 'error' : 'hidden'}>Enter username</span>
-        <input type="text" name="username" value={formData.username} onChange={handleInputChange}></input>
+        <input type="text" name="username" value={formData.username} onChange={handleInputChange}></input>*/}
 
 
         <h1>Answer Text*</h1>
