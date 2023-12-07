@@ -4,18 +4,7 @@ import axios from 'axios'
  const WelcomePage = ({updatePage, setQstnArray}) => {
 
   async function handleClick(page){
-    if(page !== 'register'){
-      axios.get('http://localhost:8000/posts/questions/newest')
-      .then(response => {
-        setQstnArray(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-      updatePage(page);
-    } else {
-      updatePage(page);
-    }
+    updatePage(page);
   }
 
   return (

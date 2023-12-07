@@ -44,7 +44,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
       {currentPage === "login" && (
         <LoginPage 
           updatePage={updatePage}
-          setSessionId={setSessionId}
+          setSessionUser={setSessionId}
         />
       )}
 
@@ -150,8 +150,8 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           setEntryId={setEntryId}
           setEntryType={setEntryType}
           updatePage={updatePage}
-          sessionId={sessionId}
-          setSessionId={setSessionId}
+          sessionUser={sessionId}
+          setSessionUser={setSessionId}
         />
       )}
     </div>
