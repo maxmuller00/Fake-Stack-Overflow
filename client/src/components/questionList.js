@@ -20,14 +20,14 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
   );
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentCommentPage(currentPage + 1);
+    if (currentCommentPage < totalPages) {
+      setCurrentCommentPage(currentCommentPage + 1);
     }
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentCommentPage(currentPage - 1);
+    if (currentCommentPage > 1) {
+      setCurrentCommentPage(currentCommentPage - 1);
     }
   };
 
@@ -43,8 +43,6 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
       setPage(page);
     })()
   }
-
-  
 
   
 
