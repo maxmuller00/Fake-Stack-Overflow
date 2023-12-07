@@ -29,6 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+
 router.get('/:ans_id', async (req, res) => {
     const ans_id = req.params.ans_id;
     try {
@@ -39,6 +40,21 @@ router.get('/:ans_id', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+
+router.get('/comments/:answer_id', async (req, res) => {
+  try {
+    const answer = await Answers.findById(req.params.answer_id).exec();
+    const comment = await Comments.find({ _id: { $in: answer.comments } }).sort({ com_date_time: -1 });
+    if (comment) {
+      res.send(comment);
+    } else {
+      res.status(404).send('Answer not found');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
   router.get('/getAnswersForQuestion/:qid', async (req, res) => {
     try {
@@ -54,6 +70,16 @@ router.get('/:ans_id', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+router.get('/getAnswered/:user_id', async (req, res) => {
+  try {
+    const answersByUser = await Answers.find({ ans_by: req.params.user_id }).exec();
+    const questions = await Questions.find({ answers: { $in: answersByUser } }).sort({ ask_date_time: -1 });
+    res.send(questions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
   
 router.use(auth); // ANYTHING BELOW THIS WILL REQUIRE AUTHENTICATION
