@@ -42,7 +42,6 @@ function tagCreate(name, user) {
     name: name,
     created_By: user,
   });
-  user.tags.push(tag);
   return tag.save();
 }
 
@@ -195,7 +194,6 @@ const populate = async () => {
     const comments_a = await commmentCreate();
     const answer = await answerCreate(text, ans_by, ans_date_time, votes, comments_a);
     answers.push(answer);
-    ans_by.answers.push(answer);
   }
 
   function getRandomRange(min, max) {
@@ -236,7 +234,6 @@ const populate = async () => {
       comments_1
     );
     questions.push(question);
-    asked_by.questions.push(question);
   }
 
   if (db) db.close();
