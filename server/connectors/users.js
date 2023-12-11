@@ -8,14 +8,15 @@ const Answer = require('../models/answers');
 const Question = require('../models/questions');
 const Comment = require('../models/comments');
 const Tag = require('../models/tags');
+const auth = require('./auth');
 
 router.post('/register', async (req, res) => {
   let newUser = req.body;
+  console.log("TESTING REGISTER");
   try {
     const emailExists = await User.findOne({ email: newUser.email }).exec();
     if (emailExists) {
-      res.send('A user account associated with that email address has already been created.');
-      return;
+      return res.status(400).send('A user account associated with that email address has already been created.');
     }
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
     const user = new User({
@@ -24,15 +25,16 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
       isAdmin: false,
     });
-    user.save();
-    res.status(200).send('success');
+    await user.save(); // Ensure to await the save operation
+
+    return res.status(200).send('success');
   } catch (err) {
-    console.log(err);
-    res.send('Internal Server Error occurred. Please try again.');
+    console.error(err);
+    return res.status(500).send('Internal Server Error occurred. Please try again.');
   }
 });
 
-router.post('/addUser', async (req, res) => {
+router.post('/login', async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   try {
@@ -50,7 +52,9 @@ router.post('/addUser', async (req, res) => {
             isAdmin: userFound.isAdmin,
           };
           req.session.user = sessionUser;
-          res.send(req.session.user);
+          req.session.save(function (err) {
+            res.send(req.session.user);
+          })
           return;
         } else {
           res.send('Incorrect password. Please try again.');

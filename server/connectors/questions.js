@@ -7,7 +7,7 @@ const Answers = require('../models/answers');
 const Users = require('../models/users');
 const Comments = require('../models/comments');
 
-const auth = require('../auth');
+const auth = require('./auth');
 
 
 async function searchByString(searchWords) {
@@ -15,7 +15,7 @@ async function searchByString(searchWords) {
   for (let word of searchWords) {
     word = word.replace(/[\\.+*?^$[\](){}/'#:!=|]/gi, '\\$&'); // escape special characters
     try {
-      const questions = await Question.find({$or: [{ title: { $regex: word, $options: 'i' } }, { text: { $regex: word, $options: 'i' } }],
+      const questions = await Questions.find({$or: [{ title: { $regex: word, $options: 'i' } }, { text: { $regex: word, $options: 'i' } }],
       }).sort({ ask_date_time: -1 });
       results = [...results, ...questions];
     } catch (err) {
@@ -37,7 +37,7 @@ async function searchByTag(searchTags) {
         tagIds.push(tagObj._id);
       }
     }
-    const questions = await Question.find({ tags: { $in: tagIds } }).sort({ ask_date_time: -1 });
+    const questions = await Questions.find({ tags: { $in: tagIds } }).sort({ ask_date_time: -1 });
     console.log("QUESTIONS ",questions);
     return questions;
   } catch (err) {
@@ -54,7 +54,7 @@ router.get('/searchingTag/:searchText', async (req, res) => {
   const phrase = req.params.searchText;
   console.log("PHRASE IS",phrase);
   if (phrase.trim() === '') {
-    const questions = await Question.find().sort({ ask_date_time: -1 }).exec();
+    const questions = await Questions.find().sort({ ask_date_time: -1 }).exec();
     res.send(questions);
     return;
   }
@@ -86,7 +86,7 @@ router.get('/searching/:searchText', async (req, res) => {
   const phrase = req.params.searchText;
   console.log("PHRASE IS",phrase);
   if (phrase.trim() === '') {
-    const questions = await Question.find().sort({ ask_date_time: -1 }).exec();
+    const questions = await Questions.find().sort({ ask_date_time: -1 }).exec();
     res.send(questions);
     return;
   }
@@ -143,7 +143,7 @@ router.get('/searching/:searchText', async (req, res) => {
 
 router.get('/newest', async (req, res) => {
   try {
-    console.log("TESTING NEWEST");
+    //console.log("TESTING NEWEST");
     const result = await getNewestQuestions();
     res.send(result);
   } catch (err) {
@@ -153,10 +153,12 @@ router.get('/newest', async (req, res) => {
 });
 
 async function getNewestQuestions() {
-  console.log("TESTING GETNEWEST");
+  //console.log("TESTING GETNEWEST");
   try {
-    return await Question.find().sort({ ask_date_time: -1 }).exec();
+    //console.log("TEST")
+    return await Questions.find().sort({ ask_date_time: -1 }).exec();
   } catch (err) {
+    //console.log("HERE");
     throw err;
   }
 }
@@ -181,8 +183,8 @@ router.get('/active', async (req, res) => {
       Question.find({ answers: { $exists: true, $ne: [] } }),
     ]);*/
 
-    const questionsWithoutAnswers = await Question.find({ answers: { $size: 0 } }).sort({ ask_date_time: -1 });
-    const questionsWithAnswers = await Question.find({ answers: { $exists: true, $ne: [] } })
+    const questionsWithoutAnswers = await Questions.find({ answers: { $size: 0 } }).sort({ ask_date_time: -1 });
+    const questionsWithAnswers = await Questions.find({ answers: { $exists: true, $ne: [] } })
 
     console.log("WITH ANSWERS ", questionsWithAnswers);
     console.log("WITHOUT ANSWERS ", questionsWithoutAnswers);
@@ -222,7 +224,7 @@ router.get('/unanswered', async (req, res) => {
 
 async function getUnansweredQuestions() {
   try {
-    return await Question.find({ answers: { $size: 0 } }).sort({ ask_date_time: -1 }).exec();
+    return await Questions.find({ answers: { $size: 0 } }).sort({ ask_date_time: -1 }).exec();
   } catch (err) {
     throw err;
   }
@@ -232,7 +234,7 @@ async function getUnansweredQuestions() {
   //gets question
   router.get('/:question', async (req, res) => {
     try {
-      const question = await Question.findById(req.params.question).exec();
+      const question = await Questions.findById(req.params.question).exec();
       if (question) {
         res.send(question);
       } else {
@@ -247,7 +249,7 @@ async function getUnansweredQuestions() {
 
   router.get('/getAllQuestions', async (req, res) => {
     try {
-      const questions = await Question.find();
+      const questions = await Questions.find();
       res.send(questions);
     } catch (err) {
       console.error(err);
@@ -350,7 +352,7 @@ router.post('/askQuestion', async (req, res) => {
       asked_by: newQuestionInput.askedBy,
     });
     await newQuestion.save();
-    Users.questions.push(newQuestion._id);
+    //Users.questions.push(newQuestion._id);
     res.send(newQuestion);
   } catch (error) {
     console.error(error);

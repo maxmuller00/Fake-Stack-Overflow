@@ -60,7 +60,7 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ, sessionId}) =>
     }
 
     async function addAnswerAsync(newAnswer) {
-      await axios.post('http://localhost:8000/posts/answers/answerQuestion', newAnswer);
+      await axios.post('http://localhost:8000/posts/answers/answerQuestion', newAnswer, {withCredentials: true});
       console.log('Answer form submitted:', formData);
       await axios.get(`http://localhost:8000/posts/questions/${currentQ._id}`)
       .then(response => {
@@ -79,9 +79,10 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ, sessionId}) =>
       const newAnswer = {
         qid : question._id,
         text: formData.text,
-        ans_by: formData.username,//this needs to be changed
+        ans_by: sessionId.userId,
         ans_date_time: new Date(),
       }
+      console.log("NEW ANSWER ", newAnswer);
       addAnswerAsync(newAnswer);
     }
   };

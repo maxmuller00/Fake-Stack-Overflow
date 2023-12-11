@@ -10,8 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "*",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "*",
+    "express-session": "^1.17.3",
     "mongoose": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "nodemon": "^3.0.2"
   }
 }

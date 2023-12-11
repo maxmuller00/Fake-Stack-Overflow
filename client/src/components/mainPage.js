@@ -13,6 +13,7 @@ import Register from "./register.js";
 import LoginPage from "./loginPage.js";
 import ModifyForm from "./modifyForm.js";
 import UserPage from "./userPage.js";
+import CommentForm from "./commentForm.js";
 import axios from 'axios';
 
 const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId}) => {
@@ -32,6 +33,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
       {currentPage === "welcome" && (
         <WelcomePage 
           updatePage={updatePage}
+          sessionUser={sessionId}
         />
       )}
 
@@ -106,6 +108,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           currentPage={currentPage}
           setPage={updatePage}
           updateQstnArray={setQstnArray}
+          sessionUser={sessionId}
         />
       )}
       {/*Answer Form */}
@@ -114,6 +117,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
         currentPage = {currentPage}
         setPage = {updatePage}
         setCurrentQ={setCurrentQ}
+        sessionId={sessionId}
       />}
       {/*Once a question has been opened */}
       {currentPage === "openQuestion" && (
@@ -123,6 +127,8 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           setPage={updatePage}
           currentQ={currentQ}
           sessionId={sessionId}
+          setEntryId={setEntryId}
+          setEntryType={setEntryType}
         />
       )}
       {/*Tags Page*/}
@@ -152,6 +158,14 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updatePage={updatePage}
           sessionUser={sessionId}
           setSessionUser={setSessionId}
+        />
+      )}
+
+      {currentPage === "commentForm" && (
+        <CommentForm 
+          commentType={entryType}
+          toId={entryId} 
+          setPage={updatePage}
         />
       )}
     </div>

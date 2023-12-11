@@ -55,6 +55,7 @@ router.post('/addNewTag', async (req, res) => {
     const newTag = new Tags({
       name : newInput.name,
       numQ : 1,
+      created_By : newInput.created_By,
     });
     await newTag.save();
     res.send(newTag);
@@ -98,9 +99,9 @@ router.get('/getUser/:user_id', async (req, res) => {
   }
 });
 
-const auth = require('../auth');
+const auth = require('./auth');
 
-router.put('/modify/:tag_id', auth, async (req, res) => {
+router.put('/edit/:tag_id', auth, async (req, res) => {
   const tag_id = req.params.tag_id;
   let tag_name = req.body.name;
 
