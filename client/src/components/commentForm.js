@@ -15,18 +15,22 @@ const CommentForm = ({ commentType, toId, setPage }) => {
     }
 
     try {
-      // Send a POST request to the backend route '/addComment'
-      const response = await axios.post('/addComment', {
-        commentType,
-        toId,
-        text,
-      }, { withCredentials: true});
-
-      if (response.data === 'success') {
-        // Handle success, e.g., show a success message
-        console.log('Comment added successfully');
-        setPage('openQuestion');
-      }
+      const newComment = {
+      text: commentText,
+      commentType: commentType,
+      toId: toId,
+    };
+    const res = await axios.post('http://localhost:8000/posts/comments/addComment', newComment);
+    if (res.data === 'success') {
+      setErrorMessage('');
+    }
+    if (res.data === 'User reputation too low') {
+      setErrorMessage('You cannot make a comment because your reputation is lower than 50');
+    }
+    if (res.data === 'Comment must be between 1 and 140 characters') {
+      setErrorMessage('Comment must be between 1 and 140 characters');
+    }
+  }
     } catch (error) {
       console.error(error);
       // Handle error, e.g., show an error message to the user
