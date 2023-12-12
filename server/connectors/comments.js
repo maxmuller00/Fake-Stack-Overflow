@@ -7,7 +7,7 @@ const Answers = require('../models/answers');
 const Users = require('../models/users');
 const Comments = require('../models/comments');
 
-const auth = require('../auth');
+const auth = require('./auth');
 
 router.use(auth); // ANYTHING BELOW THIS WILL REQUIRE AUTHENTICATION
 

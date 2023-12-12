@@ -1,9 +1,10 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 
- const WelcomePage = ({updatePage, setQstnArray}) => {
+ const WelcomePage = ({updatePage, setQstnArray, sessionUser}) => {
 
   async function handleClick(page){
+    console.log(sessionUser);
     updatePage(page);
   }
 

@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
-const QuestionsAnswered = ({questions, setPage, setModifyAnswers}) => {
+const QuestionsAnswered = ({questions, setPage}) => {
+
+  console.log("QANSWERED ", questions[0]);
 
     const handleClick = (questionId) => {
         return;
     }
+
+    if (!Array.isArray(questions) || questions.length === 0) {
+      return (
+          <div id="none">
+              <h1>No questions answered</h1>
+          </div>
+      );
+  }
 
   return (
     <div>
