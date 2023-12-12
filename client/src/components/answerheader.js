@@ -6,10 +6,16 @@ import axios from 'axios'
 
 
 
-const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessionId}) => {
+const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessionId, setEntryType, setEntryId}) => {
 
   
-  console.log(currentQ);
+  const handleComment= (entryId, entryType) => {
+    setEntryId(entryId);
+    setEntryType(entryType);
+    setPage('commentForm');
+  }
+
+  //console.log(currentQ);
   return (
     <div className='answerHeader'>
         <div className='flexDivTop'>
@@ -19,11 +25,14 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
             <div className='titleDiv'>
               <p> { currentQ.title } </p>
             </div>
-            {sessionId != "guest" && (
-        <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
+            {sessionId.loggedIn && (
+            <div>
+              <button className='askQ' onClick={()=>handleComment(currentQ._id, 'question')}>Comment</button>
+              <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
+            </div>
       )}
       {/*if username === currentQ.askedBy enter a button here that will allow user to modify question */}
-      {sessionId == "guest" && (
+      {!sessionId.loggedIn && (
         <button className="loginButton" onClick={()=>setPage("login")}>Login</button>
       )}
         </div>
@@ -33,7 +42,13 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
           <div className='askedByDiv'><p> { currentQ.asked_by }  asked on {formatQuestionMetadata(new Date(currentQ.ask_date_time))}</p></div>   
         </div>
 
-     <AnswerContainer currentQuestion={currentQ} />
+      <AnswerContainer 
+      currentQuestion={currentQ} 
+      setEntryId={setEntryId}
+      setEntryType={setEntryType} 
+      setPage={setPage}
+      sessionId={sessionId}
+      />
 
         {sessionId != "guest" &&
         (<button className='answerBtn' onClick={() => setPage('answerForm')}>Answer</button>)}

@@ -6,7 +6,7 @@ const Answers = require('../models/answers');
 const Users = require('../models/users');
 const Comments = require('../models/comments');
 
-const auth = require('../auth');
+const auth = require('./auth');
 
 
 async function getAnswerById(id){
@@ -41,20 +41,32 @@ router.get('/:ans_id', async (req, res) => {
     }
   });
 
-router.get('/comments/:answer_id', async (req, res) => {
-  try {
-    const answer = await Answers.findById(req.params.answer_id).exec();
-    const comment = await Comments.find({ _id: { $in: answer.comments } }).sort({ com_date_time: -1 });
-    if (comment) {
-      res.send(comment);
-    } else {
-      res.status(404).send('Answer not found');
+
+  router.get('/getAnswered/:user_id', async (req, res) => {
+    try {
+      const answersByUser = await Answers.find({ ans_by: req.params.user_id }).exec();
+      const questions = await Questions.find({ answers: { $in: answersByUser } }).sort({ ask_date_time: -1 });
+      res.send(questions);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
+  });
+
+  router.get('/comments/:answer_id', async (req, res) => {
+    try {
+      const answer = await Answers.findById(req.params.answer_id).exec();
+      const comment = await Comments.find({ _id: { $in: answer.comments } }).sort({ com_date_time: -1 });
+      if (comment) {
+        res.send(comment);
+      } else {
+        res.status(404).send('Answer not found');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
   router.get('/getAnswersForQuestion/:qid', async (req, res) => {
     try {
@@ -87,13 +99,15 @@ router.use(auth); // ANYTHING BELOW THIS WILL REQUIRE AUTHENTICATION
 router.post('/answerQuestion', async (req, res) => {
     let newAnswerInput = req.body;
     try {
+      console.log("TEST 1");
       const newAnswer = new Answers({
         text: newAnswerInput.text,
         ans_by: newAnswerInput.ans_by,
         question: newAnswerInput.qid,
       });
+      console.log("TEST 3");
       await newAnswer.save();
-  
+      console.log("TEST 2");
       if (!newAnswerInput.qid) {
         res.status(400).send('Missing qid parameter');
         return;
@@ -103,7 +117,7 @@ router.post('/answerQuestion', async (req, res) => {
   
       if (question) {
         question.answers.push(newAnswer._id);
-        user.answers.push(newAnswer._id);
+        //Users.answers.push(newAnswer._id);
         await question.save();
         res.send(question);
       } else {

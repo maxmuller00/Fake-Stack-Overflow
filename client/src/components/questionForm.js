@@ -36,18 +36,22 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
 
   const [formData, setFormData] = useState({
     title: '',
+    summary : '',
     text: '',
     tags: '',
   });
 
   const [errors, setErrors] = useState({
     title: false,
+    summary: false,
     text: false,
     tags: false,
     tags2: false,
     tags3: false,
     link: false,
   })
+
+  const [repError, setRepError] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -61,6 +65,8 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
       [name]: false,
     });
 
+    setRepError(false);
+
   };
 
   const handleSubmit = (event) => {
@@ -69,6 +75,9 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
     const newErrors = {}
     if (formData.title.length > 100 || formData.title.length === 0) {
       newErrors.title = true;
+    }
+    if (formData.summary.length > 140 || formData.title.length === 0) {
+      newErrors.summary = true;
     }
     if (formData.text.length === 0) {
       newErrors.text = true;
@@ -93,7 +102,8 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
     function createTag(tag){
       const newTag = {
         name : tag,
-        qNum : 1
+        qNum : 1,
+        created_By : sessionUser.userId,
       }
       axios.post('http://localhost:8000/posts/tags/addNewTag', newTag).then(response => {
         console.log('New Tag succesfully created: ', response.data);
@@ -121,6 +131,7 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
       // and perform further actions here
       const newQuestion = {
         title: formData.title,
+        summary: formData.summary,
         text: formData.text,
         tags: [],
         asked_by : sessionUser.username,
@@ -142,13 +153,17 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
           console.log("TagName ",tagName);
           newQuestion.tags.push(tagName);
         } else {
-          const newTag = createTag(words[i].toLowerCase());
-          newQuestion.tags.push(newTag.name);
+          if(sessionUser.reputation > 49){
+            const newTag = createTag(words[i].toLowerCase());
+            newQuestion.tags.push(newTag.name);
+          }else {
+            setRepError(true);
+          }
         }
       }
       
       axios
-        .post('http://localhost:8000/posts/questions/askQuestion', newQuestion, {
+        .post('http://localhost:8000/posts/questions/askQuestion', newQuestion, {withCredentials: true}, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -174,6 +189,10 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
             <span id="error1" className={errors.title ? 'error' : 'hidden'}>Title must be between 1 and 100 characters</span>
             <input type="text" name="title" value={formData.title} onChange={handleInputChange}></input>
 
+            <h1>Summary*</h1>
+            <span id="error4" className={errors.summary ? 'error' : 'hidden'}>Summary must be between 1 and 140 characters</span>
+            <input type="text" name="summary" value={formData.summary} onChange={handleInputChange}></input>
+
 
             <h1>Question Text*</h1>
             <h4 id="textError"> Add Details</h4>
@@ -187,12 +206,8 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
             <span id="error3" className={errors.tags ? 'error' : 'hidden'}>Please enter at least one tag</span>
             <span id="errort4" className={errors.tags2 ? 'error' : 'hidden'}>Please enter at most 5 tags.</span>
             <span id="errort5" className={errors.tags3 ? 'error' : 'hidden'}>Make sure all tags are 10 chacters or less.</span>
+            <span id="errort6" className={repError ? 'error' : 'hidden'}>Your reputation is too low to create a new tag</span>
             <input type="text" name="tags" value={formData.tags} onChange={handleInputChange}></input>
-
-
-            {/*<h1>Username*</h1>
-            <span id="error4" className={errors.username ? 'error' : 'hidden'}>Enter a username</span>
-            <input type="text" name="username" value={formData.username} onChange={handleInputChange}></input>*/}
 
             <br></br>
             <input id="post" type="submit" value="Post"></input>

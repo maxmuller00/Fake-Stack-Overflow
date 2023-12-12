@@ -27,10 +27,10 @@ const Questionheader = ({qarray, updateQstnArray, currentPage, setPage, sessionI
       <p>{qarray.length} Questions</p>
     </div>
     <div className="buttonsDiv">
-      {sessionId !== "guest" && (
+      {sessionId.loggedIn && (
         <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
       )}
-      {sessionId === "guest" && (
+      {!sessionId.loggedIn && (
         <button className="loginButton" onClick={()=>setPage("login")}>Login</button>
       )}
       <div className='filters'>

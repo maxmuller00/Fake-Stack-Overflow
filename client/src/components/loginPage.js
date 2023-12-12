@@ -60,7 +60,7 @@ const LoginPage = ({updatePage, setSessionUser}) => {
               password: loginData.password,
             }
             let user;
-            axios.post(`http://localhost:8000/users/login`, newUser).then(response => {
+            axios.post(`http://localhost:8000/users/login`, newUser, {withCredentials: true}).then(response => {
                 user = response.data;
                 console.log(user);
                 if(typeof(user) === 'string'){

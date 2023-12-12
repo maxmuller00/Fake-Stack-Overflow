@@ -13,6 +13,8 @@ const sidenav = ({currentPage, updatePage, currentQstnArray, setQstnArray, sessi
 
   const handleLogout = () => {
     setSessionUser({loggedIn : false, admin : false});
+    console.log(sessionUser);
+    axios.post('http://localhost:8000/users/logout');
     updatePage("welcome");
   }
 
@@ -29,7 +31,7 @@ const sidenav = ({currentPage, updatePage, currentQstnArray, setQstnArray, sessi
            {sessionUser.username}</button>
         )}
         {sessionUser.loggedIn === true && (
-          <button className='logoutSideNav' onClick={handleLogout}>Log Out</button>
+          <button className='logoutSideNav' onClick={() => handleLogout()}>Log Out</button>
         )}
         {sessionUser.loggedIn === false && (
           <button className='logoutSideNav' onClick={handleLogIn}>Log In</button>

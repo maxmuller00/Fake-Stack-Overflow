@@ -189,3 +189,13 @@
     border: dotted; /* Optional: Add borders to the divs for visual separation. */
     text-align: center;
   }
+
+  .commentsContainer {
+    margin-top: 10px; /* Adjust as needed for spacing */
+  }
+  
+  .commentItem {
+    border: 1px solid #ccc; /* Example border styling */
+    margin-top: 5px; /* Adjust spacing between comments */
+    padding: 5px; /* Adjust padding as needed */
+  }
