@@ -130,10 +130,10 @@ const populate = async () => {
 
   // Create 3 users
   const users = [];
-  const reputations = [0, 20, 80];
-  for (let i = 1; i <= 3; i++) {
+  const reputations = [0, 20, 40, 80, 150, 500];
+  for (let i = 1; i <= 6; i++) {
     const username = `user${i}`;
-    const email = `user${i}@gmail.com`;
+    const email = `user${i}@example.com`;
     const password = 'a1b2c3';
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = false;
@@ -143,9 +143,9 @@ const populate = async () => {
     users.push(user);
   }
 
-  // Create 5 Tags
+  // Create 15 Tags
   const tags_0 = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 16; i++) {
     let tag = await tagCreate(`tag${i}`, users[i % 3]);
     tags_0.push(tag);
   }
@@ -163,7 +163,7 @@ const populate = async () => {
 
   const comments = [];
   for (let i = 0; i < 14; i++) {
-    const text = `Comment ${i} ${randomWord(keywords)} ${randomWord(keywords)} `;
+    const text = `${randomWord(keywords)} ${randomWord(keywords)} `;
     const com_by = randomWord(users);
     const com_date_time = new Date();
     const votes = 0;
@@ -174,7 +174,7 @@ const populate = async () => {
   async function commmentCreate() {
     const comments = [];
     for (let i = 0; i < 4; i++) {
-      const text = `Comment ${i} ${randomWord(keywords)} ${randomWord(keywords)} `;
+      const text = `${randomWord(keywords)} ${randomWord(keywords)} `;
       const com_by = randomWord(users);
       const com_date_time = new Date();
       const votes = 0;
@@ -186,8 +186,8 @@ const populate = async () => {
 
   
   const answers = [];
-  for (let i = 0; i < 5; i++) {
-    const text = `Answer ${i} ${randomWord(keywords)} ${randomWord(keywords)} `;
+  for (let i = 0; i < 30; i++) {
+    const text = `${randomWord(keywords)} ${randomWord(keywords)} `;
     const ans_by = randomWord(users);
     const ans_date_time = new Date();
     const votes = 0;
@@ -206,10 +206,10 @@ const populate = async () => {
   }
 
   const questions = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 45; i++) {
     const title = `${randomWord(keywords)} ${randomWord(keywords)} `;
-    const summary = `Summary of question ${i} ${randomWord(keywords)}`;
-    const text = `Text of question ${i} ${randomWord(keywords)} ${randomWord(keywords)} ${randomWord(keywords)}`;
+    const summary = `${i} ${randomWord(keywords)}`;
+    const text = `${i} ${randomWord(keywords)} ${randomWord(keywords)} ${randomWord(keywords)}`;
     const tags_1 = randomUniqueTags();
     const answers_1 = [];
     let [min, max] = getRandomRange(0, answers.length);
