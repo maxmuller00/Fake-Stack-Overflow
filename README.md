@@ -8,7 +8,7 @@ Add design docs in *images/*
 - Welcome Page
 - Register Page
 - Comments
-- User Page
+- User Page/Admin Page
 - Upvoting and Downvoting Answers
 
 ## Team Member 2 Contribution
@@ -17,5 +17,6 @@ Add design docs in *images/*
 - Creating new Users
 - Sending data to database
 - Cookies/Sessions
+- User Page/Admin Page
 - Password Hashing
 
