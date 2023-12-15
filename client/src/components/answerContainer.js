@@ -25,7 +25,8 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
     const [answerArray, setAnswerArray] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [comments, setComments] = useState([]);
-    const [votedAnswers, setVotedAnswers] = useState([]);
+    const [upVotedAnswers, setUpVotedAnswers] = useState([]);
+    const [downVotedAnswers, setDownVotedAnswers] = useState([]);
     const [votedComments, setVotedComments] = useState([]);
     const answersPerPage = 3;
 
@@ -35,6 +36,20 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
             setAnswerArray([...res.data]);
           });
       }, [currentQuestion]);
+
+      const fetchAnswersForQuestion = () => {
+        console.log("fetching");
+        axios.get(`http://localhost:8000/posts/answers/getAnswersForQuestion/${currentQuestion._id}`)
+          .then((res) => {
+            console.log("fetched data ", res.data);
+            setAnswerArray([...res.data]);
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching answers:', error);
+            // Handle error
+          });
+      };
 
 
       //console.log(answerArray);
@@ -60,7 +75,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
         }
       };
 
-        const fetchCommentsForAnswer = async (ansId) => {
+  const fetchCommentsForAnswer = async (ansId) => {
     try {
       const comments = await getComments(ansId._id, 'Answer');
       return comments;
@@ -97,34 +112,48 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
   }
 
     // Function to handle upvoting an answer
-    const handleUpvoteAnswer = async (answerId) => {
-      try {
-        if (!votedAnswers.includes(answerId)) {
-          const response = await axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true});
-          // Handle success - Update UI or state as needed
-          console.log('Upvoted answer:', response.data);
-          setVotedAnswers([...votedAnswers, answerId]);
-        }
-      } catch (error) {
-        console.error('Error upvoting answer:', error);
-        // Handle error
+  const handleUpvoteAnswer = async (answerId) => {
+    try {
+      if (!upVotedAnswers.includes(answerId)) {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Upvoted answer:', response.data);
+
+        fetchAnswersForQuestion();
+
+        setUpVotedAnswers([...upVotedAnswers, answerId]);
+        setDownVotedAnswers(downVotedAnswers.filter((id) => id !== answerId));
+      } else {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Un-upvoted answer:', response.data);
+        setUpVotedAnswers(upVotedAnswers.filter((id) => id !== answerId));
       }
-    };
+    } catch (error) {
+      console.error('Error upvoting answer:', error);
+      // Handle error
+    }
+  };
   
     // Function to handle downvoting an answer
-    const handleDownvoteAnswer = async (answerId) => {
-      try {
-        if (!votedAnswers.includes(answerId)) {
-          const response = await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true});
-          // Handle success - Update UI or state as needed
-          console.log('Downvoted answer:', response.data);
-          setVotedAnswers(votedAnswers.filter((id) => id !== answerId));
-        }
-      } catch (error) {
-        console.error('Error downvoting answer:', error);
-        // Handle error
+  const handleDownvoteAnswer = async (answerId) => {
+    try {
+      if (!downVotedAnswers.includes(answerId)) {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Downvoted answer:', response.data);
+
+        fetchAnswersForQuestion();
+
+        setDownVotedAnswers([...downVotedAnswers, answerId]);
+        setUpVotedAnswers(upVotedAnswers.filter((id) => id !== answerId));
+      } else {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Un-downvoted answer:', response.data);
+        setDownVotedAnswers(downVotedAnswers.filter((id) => id !== answerId));
       }
-    };
+    } catch (error) {
+      console.error('Error downvoting answer:', error);
+      // Handle error
+    }
+  };
 
      // Function to handle upvoting a comment
   const handleUpvoteComment = async (commentId) => {
@@ -138,17 +167,11 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
     }
   };
 
-  // Function to handle downvoting a comment
-  const handleDownvoteComment = async (commentId) => {
-    try {
-      const response = await axios.patch(`http://localhost:8000/posts/comments/decrementVotes/${commentId}/${sessionId.userId}`);
-      // Handle success - Update UI or state as needed
-      console.log('Downvoted comment:', response.data);
-    } catch (error) {
-      console.error('Error downvoting comment:', error);
-      // Handle error
-    }
-  };
+  if(answerArray.length === 0){
+    return(
+      <h1>No Answers</h1>
+    )
+  }
 
   return (
     <div>
@@ -159,7 +182,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
           </div>
           <div className="answeredByDiv">
             <p>
-              {ans_Id.ans_by} answered on{' '}
+              {ans_Id.ans_by_name} answered on{' '}
               {formatQuestionMetadata(new Date(ans_Id.ans_date_time))}
             </p>
             {/* Display vote count for the answer */}
@@ -172,8 +195,8 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
           )}
           {/* Upvote and Downvote buttons for answers */}
           {sessionId.loggedIn && (<div className="voteButtons">
-          <button onClick={() => handleUpvoteAnswer(ans_Id._id)} disabled={votedAnswers.includes(ans_Id._id)}>Upvote Answer</button>
-            <button onClick={() => handleDownvoteAnswer(ans_Id._id)} disabled={votedAnswers.includes(ans_Id._id)}>Downvote Answer</button>
+            <button onClick={() => handleUpvoteAnswer(ans_Id._id)} disabled={upVotedAnswers.includes(ans_Id._id)}>Upvote Answer</button>
+            <button onClick={() => handleDownvoteAnswer(ans_Id._id)} disabled={downVotedAnswers.includes(ans_Id._id)}>Downvote Answer</button>
           </div>)}
           {/* Display comments for the current answer */}
           <div className="commentContainer">
@@ -186,7 +209,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
                   </div>
                   <div className="answeredByDiv">
                     <p>
-                      {comment.com_by} answered on{' '}
+                      {comment.com_by_name} answered on{' '}
                       {formatQuestionMetadata(new Date(comment.com_date_time))}
                     </p>
                   </div>

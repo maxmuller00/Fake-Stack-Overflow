@@ -18,7 +18,7 @@ const Fakestackoverflow = () => {
   };
 
   const updateQstnArray = (array) => {
-    console.log("ARRAY ", array);
+    //console.log("ARRAY ", array);
     setQstnArray(array);
   };
 

@@ -33,6 +33,7 @@ router.post('/addComment', async (req, res) => {
     const newComment = new Comments({
       text: newCommentInput.text,
       com_by: newCommentInput.com_by,
+      com_by_name: newCommentInput.com_by_name,
     });
     await newComment.save();
 

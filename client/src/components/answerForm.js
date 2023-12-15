@@ -80,6 +80,7 @@ const AnswerForm = ({currentQ, currentPage, setPage, setCurrentQ, sessionId}) =>
         qid : question._id,
         text: formData.text,
         ans_by: sessionId.userId,
+        ans_by_name: sessionId.username,
         ans_date_time: new Date(),
       }
       console.log("NEW ANSWER ", newAnswer);

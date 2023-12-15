@@ -104,6 +104,7 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
         name : tag,
         qNum : 1,
         created_By : sessionUser.userId,
+        created_by_name: sessionUser.username,
       }
       axios.post('http://localhost:8000/posts/tags/addNewTag', newTag).then(response => {
         console.log('New Tag succesfully created: ', response.data);
@@ -133,8 +134,8 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
         title: formData.title,
         summary: formData.summary,
         text: formData.text,
-        tags: [],
-        asked_by : sessionUser.username,
+        tagNames: [],
+        asked_by_name : sessionUser.username,
         ask_date_time: new Date(),
         answers: [],
         views: 0,
@@ -151,11 +152,12 @@ const Questionform = ({currentPage, setPage, updateQstnArray, sessionUser}) => {
             }
           }
           console.log("TagName ",tagName);
-          newQuestion.tags.push(tagName);
+          newQuestion.tagNames.push(tagName);
+          console.log("tags pushed ", newQuestion.tags);
         } else {
           if(sessionUser.reputation > 49){
             const newTag = createTag(words[i].toLowerCase());
-            newQuestion.tags.push(newTag.name);
+            newQuestion.tagNames.push(newTag.name);
           }else {
             setRepError(true);
           }

@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 router.get('/:ans_id', async (req, res) => {
     const ans_id = req.params.ans_id;
     try {
-      const result = await getAnswerById(ans_id);
+      const result = await Answers.findById(ans_id).exec();
       res.send(result);
     } catch (err) {
       console.error(err);
@@ -93,6 +93,79 @@ router.get('/getAnswered/:user_id', async (req, res) => {
   }
 });
 
+  router.patch('/incrementVotes/:answer/:userVoted', async (req, res) => {
+    console.log("TEST1");
+    const answer = await Answers.findById(req.params.answer).exec();
+    let updateUserReputation = 0;
+    if (answer) {
+      let voterObj = answer.voters.filter((voter) => voter.userVoted.toString() === req.params.userVoted);
+      if (voterObj.length > 0) {
+        let userVoted = voterObj[0].userVoted;
+        let currentDirection = voterObj[0].amount;
+        if (currentDirection === -1) {
+          answer.votes += 1;
+          updateUserReputation = 10;
+        } else if (currentDirection === 0) {
+          answer.votes += 1;
+          updateUserReputation = 5;
+        }
+        let direction = Math.min(currentDirection + 1, 1);
+        const objIndex = answer.voters.findIndex((obj) => obj.userVoted == userVoted);
+        answer.voters[objIndex].direction = direction;
+      } else {
+        answer.votes += 1;
+        updateUserReputation = 5;
+        answer.voters.push({
+          userVoted: req.params.userVoted,
+          direction: 1,
+        });
+      }
+      await answer.save();
+      let userToUpdate = await Users.findOne({ _id: answer.ans_by }).exec();
+      userToUpdate.reputation += updateUserReputation;
+      await userToUpdate.save();
+      res.status(200).send(answer);
+    } else {
+      res.status(404).send('Answer not found');
+    }
+  });
+
+  router.patch('/decrementVotes/:answer/:userVoted', async (req, res) => {
+    const answer = await Answers.findById(req.params.answer).exec();
+    let updateUserReputation = 0;
+    if (answer) {
+      let voterObj = answer.voters.filter((voter) => voter.userVoted.toString() === req.params.userVoted);
+      if (voterObj.length > 0) {
+        let userVoted = voterObj[0].userVoted;
+        let currentDirection = voterObj[0].amount;
+        if (currentDirection === 1) {
+          answer.votes -= 1;
+          updateUserReputation = 5;
+        } else if (currentDirection === 0) {
+          answer.votes -= 1;
+          updateUserReputation = 10;
+        }
+        let direction = Math.max(currentDirection - 1, -1);
+        const objIndex = answer.voters.findIndex((obj) => obj.userVoted == userVoted);
+        answer.voters[objIndex].direction = direction;
+      } else {
+        answer.votes -= 1;
+        updateUserReputation = 10;
+        answer.voters.push({
+          userVoted: req.params.userVoted,
+          direction: -1,
+        });
+      }
+      await answer.save();
+      let userToUpdate = await Users.findOne({ _id: answer.ans_by }).exec();
+      userToUpdate.reputation -= updateUserReputation;
+      await userToUpdate.save();
+      res.status(200).send(answer);
+    } else {
+      res.status(404).send('Answer not found');
+    }
+  });
+
   
 router.use(auth); // ANYTHING BELOW THIS WILL REQUIRE AUTHENTICATION
 
@@ -103,6 +176,7 @@ router.post('/answerQuestion', async (req, res) => {
       const newAnswer = new Answers({
         text: newAnswerInput.text,
         ans_by: newAnswerInput.ans_by,
+        ans_by_name: newAnswerInput.ans_by_name,
         question: newAnswerInput.qid,
       });
       console.log("TEST 3");
@@ -132,6 +206,7 @@ router.post('/answerQuestion', async (req, res) => {
 router.delete('/deleteAnswer/:answer_id', async (req, res) => {
   try {
     const answer = await Answers.findById(req.params.answer_id).exec();
+    console.log("ANSWER IS ", answer);
     if (answer) {
       const question = await Questions.find({ answers: { $in: answer } }).exec();
       if (question) {
@@ -169,41 +244,6 @@ router.put('/editAnswer/:answer_id', async (req, res) => {
   }
 });
 
-router.patch('/incrementVotes/:answer/:userVoted', async (req, res) => {
-  const answer = await Answers.findById(req.params.answer).exec();
-  let updateUserReputation = 0;
-  if (answer) {
-    let voterObj = answer.voters.filter((voter) => voter.userVoted.toString() === req.params.userVoted);
-    if (voterObj.length > 0) {
-      let userVoted = voterObj[0].userVoted;
-      let currentDirection = voterObj[0].direction;
-      if (currentDirection === -1) {
-        answer.votes += 1;
-        updateUserReputation = 10;
-      } else if (currentDirection === 0) {
-        answer.votes += 1;
-        updateUserReputation = 5;
-      }
-      let direction = Math.min(currentDirection + 1, 1);
-      const objIndex = answer.voters.findIndex((obj) => obj.userVoted == userVoted);
-      answer.voters[objIndex].direction = direction;
-    } else {
-      answer.votes += 1;
-      updateUserReputation = 5;
-      answer.voters.push({
-        userVoted: req.params.userVoted,
-        direction: 1,
-      });
-    }
-    await answer.save();
-    let userToUpdate = await Users.findOne({ _id: answer.ans_by }).exec();
-    userToUpdate.reputation += updateUserReputation;
-    await userToUpdate.save();
-    res.status(200).send(answer);
-  } else {
-    res.status(404).send('Answer not found');
-  }
-});
 
 router.patch('/comments/incrementVotes/:comment/:userVoted', async (req, res) => {
   const comment = await Comments.findById(req.params.comment).exec();
@@ -224,42 +264,6 @@ router.patch('/comments/incrementVotes/:comment/:userVoted', async (req, res) =>
     res.status(200).send(comment);
   } else {
     res.status(404).send('Question not found');
-  }
-});
-
-router.patch('/decrementVotes/:answer/:userVoted', async (req, res) => {
-  const answer = await Answers.findById(req.params.answer).exec();
-  let updateUserReputation = 0;
-  if (answer) {
-    let voterObj = answer.voters.filter((voter) => voter.userVoted.toString() === req.params.userVoted);
-    if (voterObj.length > 0) {
-      let userVoted = voterObj[0].userVoted;
-      let currentDirection = voterObj[0].direction;
-      if (currentDirection === 1) {
-        answer.votes -= 1;
-        updateUserReputation = 5;
-      } else if (currentDirection === 0) {
-        answer.votes -= 1;
-        updateUserReputation = 10;
-      }
-      let direction = Math.max(currentDirection - 1, -1);
-      const objIndex = answer.voters.findIndex((obj) => obj.userVoted == userVoted);
-      answer.voters[objIndex].direction = direction;
-    } else {
-      answer.votes -= 1;
-      updateUserReputation = 10;
-      answer.voters.push({
-        userVoted: req.params.userVoted,
-        direction: -1,
-      });
-    }
-    await answer.save();
-    let userToUpdate = await Users.findOne({ _id: answer.ans_by }).exec();
-    userToUpdate.reputation -= updateUserReputation;
-    await userToUpdate.save();
-    res.status(200).send(answer);
-  } else {
-    res.status(404).send('Answer not found');
   }
 });
 

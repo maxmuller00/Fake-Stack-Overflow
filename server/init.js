@@ -41,6 +41,7 @@ function tagCreate(name, user) {
   let tag = new Tag({
     name: name,
     created_By: user,
+    created_by_name: user.username,
   });
   return tag.save();
 }
@@ -53,6 +54,7 @@ function questionCreate(title, summary, text, tags, answers, asked_by, ask_date_
     tags: tags,
     answers: answers,
     asked_by: asked_by,
+    asked_by_name: asked_by.username,
     ask_date_time: ask_date_time,
     views: views,
     votes: votes,
@@ -65,6 +67,7 @@ function answerCreate(text, ans_by, ans_date_time, votes, comments) {
   let answer = new Answer({
     text: text,
     ans_by: ans_by,
+    ans_by_name: ans_by.username,
     ans_date_time: ans_date_time,
     votes: votes,
     comments: comments,
@@ -76,6 +79,7 @@ function commentCreate(text, com_by, com_date_time, votes) {
   let comment = new Comment({
     text: text,
     com_by: com_by,
+    com_by_name: com_by.username,
     com_date_time: com_date_time,
     votes: votes,
   });

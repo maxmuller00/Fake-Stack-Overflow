@@ -7,6 +7,7 @@ let TagSchema = new Schema(
     {
         name : {type: String , unique: true, required: true},
         created_By : { type: Schema.Types.ObjectId, ref: 'User', required: true},
+        created_by_name: {type: String},
         numQ : {type : Number, default : 0},
     }
 );
