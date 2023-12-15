@@ -139,6 +139,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           sessionId={sessionId}
           setEntryId={setEntryId}
           setEntryType={setEntryType}
+          sessionUser={sessionId}
         />
       )}
       {/*Tags Page*/}

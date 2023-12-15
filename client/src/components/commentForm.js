@@ -50,7 +50,8 @@ const CommentForm = ({ commentType, toId, setPage, sessionUser }) => {
           cols={50}
         />
         {errorMessage && <p>{errorMessage}</p>}
-        <button type="submit">Add Comment</button>
+        {sessionUser.reputation < 50 && <p>You're reputation is too low, you may not comment at this time</p>}
+        <button type="submit" disabled={sessionUser.reputation < 50 }>Add Comment</button>
       </form>
     </div>
   );

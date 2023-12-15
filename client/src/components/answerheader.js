@@ -6,12 +6,20 @@ import axios from 'axios'
 
 
 
-const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessionId, setEntryType, setEntryId}) => {
+const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessionId, setEntryType, setEntryId, sessionUser}) => {
 
   const [comments, setComments] = useState([]);
   const [commentsPerPage] = useState(3);
   const [pageNum, setPageNum] = useState(1); // Renamed state to 'pageNum'
   const [currentPageComments, setCurrentPageComments] = useState([]);
+  const [upVoted, setUpVoted] = useState(false);
+  const [downVoted, setDownVoted] = useState(false);
+
+  async function fetchQuestion(){
+    await axios.get(`http://localhost:8000/posts/questions/${qid._id}`).then((res) => {
+      setCurrentQ(res.data);
+    })
+  }
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -49,6 +57,45 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
     }
   };
 
+  const handleUpvoteQuestion = async () => {
+    try {
+      if (!upVoted) {
+        const response = await axios.patch(`http://localhost:8000/posts/questions/incrementVotes/${qid._id}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Upvoted question:', response.data);
+
+
+        setUpVoted(true);
+      } else {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${qid._id}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Un-upvoted question:', response.data);
+        setUpVoted(false);
+      }
+    } catch (error) {
+      console.error('Error upvoting question:', error);
+      // Handle error
+    }
+  };
+  
+    // Function to handle downvoting an answer
+  const handleDownvoteQuestion = async (answerId) => {
+    try {
+      if (!downVoted) {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/decrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Downvoted question:', response.data);
+
+
+        setDownVoted(true);
+      } else {
+        const response = await axios.patch(`http://localhost:8000/posts/answers/incrementVotes/${answerId}/${sessionId.userId}`, { withCredentials: true });
+        console.log('Un-downvoted question:', response.data);
+        setDownVoted();
+      }
+    } catch (error) {
+      console.error('Error downvoting answer:', error);
+      // Handle error
+    }
+  };
+
   
   
   const handleComment= (entryId, entryType) => {
@@ -74,8 +121,8 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
                 <button className='askQ' onClick={()=>setPage('questionForm')}>Ask Question</button>
               </div>
               <div>
-                <button>Upvote</button>
-                <button>Downvote</button>
+                {sessionUser.loggedIn && <button onClick={() => handleUpvoteQuestion()} disabled={upVoted}>Upvote</button>}
+                {sessionUser.loggedIn && <button onClick={() => handleDownvoteQuestion()} disabled={downVoted}>Downvote</button>}
               </div>
             </div>
       )}
@@ -83,22 +130,29 @@ const  Answerheader = ({qid, currentPage, setPage, currentQ, setCurrentQ, sessio
         <button className="loginButton" onClick={()=>setPage("login")}>Login</button>
       )}
         </div>
-        <div className='flexDiv'>
+        <div className='flexDivTop'>
           <div className='viewDiv'><p> { currentQ.views + 1} views</p><span>Votes: {qid.votes}</span></div>
           <div className='textDiv'><p> { extractLink(currentQ.text) } </p></div>
           <div className='askedByDiv'><p> { currentQ.asked_by_name }  asked on {formatQuestionMetadata(new Date(currentQ.ask_date_time))}</p></div>   
         </div>
-
+        <h4>Comments: </h4>
         {comments.length > 0 && (
           <div>
             {/* Render comments */}
             {currentPageComments.map(comment => (
-              <div key={comment._id}>
-                {/* Display individual comment */}
-                {/* Modify the display as per your comment structure */}
-                <p>{comment.text}</p>
-                <p>{comment.created_at}</p>
-              </div>
+              <div key={comment._id} className="commentItem">
+                  <div className="textDiv2">
+                    <p>{extractLink(comment.text)}</p>
+                  </div>
+                  <div className="answeredByDiv">
+                    <p>
+                      {comment.com_by_name} commented {' '}
+                      {formatQuestionMetadata(new Date(comment.com_date_time))}
+                    </p>
+                    {sessionId.loggedIn && <button>Upvote</button>}
+                    <span>Votes: {comment.votes}</span>
+                  </div>
+                </div>
             ))}
 
             {/* Pagination */}

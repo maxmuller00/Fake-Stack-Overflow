@@ -175,6 +175,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
 
   return (
     <div>
+      <h1>Answers: </h1>
       {currentAnswers.map((ans_Id) => (
         <div>
           <div key={ans_Id._id} className="flexDiv">
@@ -201,6 +202,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
             </div>)}
           </div>
           <div className="commentContainer">
+            {ans_Id.comments.length !== 0 && <h4>Comments: </h4>}
             {comments
               .find((commentObj) => commentObj.ansId === ans_Id._id)
               ?.comments.map((comment) => (
@@ -210,7 +212,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
                   </div>
                   <div className="answeredByDiv">
                     <p>
-                      {comment.com_by_name} answered on{' '}
+                      {comment.com_by_name} commented {' '}
                       {formatQuestionMetadata(new Date(comment.com_date_time))}
                     </p>
                     {sessionId.loggedIn && <button>Upvote</button>}
