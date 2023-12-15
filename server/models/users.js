@@ -11,7 +11,7 @@ let UserSchema = new Schema( {
     tags: { type: [Schema.Types.ObjectId], ref: 'Tag' },
     answers: { type: [Schema.Types.ObjectId], ref: 'Answer' },
     questions: { type: [Schema.Types.ObjectId], ref: 'Question' },
-    reputation: {type: Number, default: 0}
+    reputation: {type: Number, default: 50}
     
 });
 

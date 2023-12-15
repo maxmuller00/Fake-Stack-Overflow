@@ -167,7 +167,7 @@ async function getLatestAnswerDate(answerIds) {
   let latestDate = new Date(0);
   for (const answerId of answerIds) {
     console.log("ANSWERID ", answerId);
-    const answer = await Answer.findById(answerId);
+    const answer = await Answers.findById(answerId);
     console.log("ANSWER ", answer);
     if (new Date(answer.ans_date_time) > latestDate) {
       latestDate = answer.ans_date_time;
@@ -262,6 +262,7 @@ router.get('/comments/:question_id', async (req, res) => {
     const question = await Questions.findById(req.params.question_id).exec();
     const comment = await Comments.find({ _id: { $in: question.comments } }).sort({ com_date_time: -1 });
     if (comment) {
+      console.log(comment);
       res.send(comment);
     } else {
       res.status(404).send('Answer not found');
@@ -324,7 +325,7 @@ router.post('/askQuestion', async (req, res) => {
     const tagExists = await Tags.findOne({ name: tag }).exec();
     if (tagExists) {
       tagIds.push(tagExists._id);
-      Users.tags.push(tagExists._id);
+      //Users.tags.push(tagExists._id);
     } else {
       try {
         const user = await Users.findOne({ _id: newQuestionInput.askedBy }).exec();
@@ -350,6 +351,7 @@ router.post('/askQuestion', async (req, res) => {
       text: newQuestionInput.text,
       tags: tagIds,
       asked_by: newQuestionInput.askedBy,
+      asked_by_name: newQuestionInput.asked_by_name,
     });
     await newQuestion.save();
     //Users.questions.push(newQuestion._id);

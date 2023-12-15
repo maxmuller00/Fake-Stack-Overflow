@@ -8,7 +8,7 @@ import CreateTagForQuestion from '../helpers/createTagForQuestion.js'
 const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, setCurrentQ, model}) => {
 
   const [currentCommentPage, setCurrentCommentPage] = useState(1);
-  const questionsPerPage = 3;
+  const questionsPerPage = 5;
 
   const totalPages = Math.ceil(qarray.length / questionsPerPage);
 
@@ -60,13 +60,15 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
           <div className="viewDiv">
             <p>{question.answers.length} answers</p>
             <p>{question.views} views</p>
+            <p>Votes: {question.votes}</p>
           </div>
           <div className="titleDiv">
             <button className='qTitle'onClick={() => handleClick('openQuestion', question)}>{question.title}</button>
+            <p>{question.summary}</p>
             <CreateTagForQuestion tagIds={question.tags} qid={question._id} />
           </div>
           <div className="askedByDiv">
-              <p>{question.asked_by} asked {formatQuestionMetadata(new Date(question.ask_date_time))}</p>
+              <p>{question.asked_by_name} asked {formatQuestionMetadata(new Date(question.ask_date_time))}</p>
           </div>
         </div>
     ))}
@@ -74,7 +76,7 @@ const QuestionList = ({qarray, setQstnArray, currentPage, setPage, currentQ, set
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
           Previous
         </button>
-        <span>Page {currentPage} of {totalPages}</span>
+        <span>Page {currentCommentPage} of {totalPages}</span>
         <button onClick={handleNextPage} disabled={currentPage === totalPages}>
           Next
         </button>

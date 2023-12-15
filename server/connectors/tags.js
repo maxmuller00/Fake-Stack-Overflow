@@ -56,6 +56,7 @@ router.post('/addNewTag', async (req, res) => {
       name : newInput.name,
       numQ : 1,
       created_By : newInput.created_By,
+      created_by_name: newInput.created_by_name,
     });
     await newTag.save();
     res.send(newTag);

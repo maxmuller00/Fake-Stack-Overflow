@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Questionform from "./questionForm";
 import QuestionList from "./questionList";
 import Questionheader from "./questionheader";
@@ -14,6 +14,7 @@ import LoginPage from "./loginPage.js";
 import ModifyForm from "./modifyForm.js";
 import UserPage from "./userPage.js";
 import CommentForm from "./commentForm.js";
+import ModifyAnswerContainer from "./modifyAnswerContainer.js";
 import axios from 'axios';
 
 const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId}) => {
@@ -25,6 +26,12 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
 
   const [entryType, setEntryType] = useState('');
   const [entryId, setEntryId] = useState('');
+  const [modAnswerQ, setModAnswerQ] = useState('');
+  const [commentType, setCommentType] = useState('');
+
+  useEffect(() => {
+    console.log("modAnswerQ ", modAnswerQ);
+  }, [modAnswerQ]);
 
 
   return (
@@ -68,6 +75,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           setPage={updatePage}
           currentQ={currentQ}
           setCurrentQ={setCurrentQ}
+          setQstnArray={setQstnArray}
         />
       )}
       {/*Search Header */}
@@ -151,6 +159,16 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
         />
       )}
 
+      {currentPage === 'modAnswer' && (
+        <ModifyAnswerContainer 
+          modifyAnswerQ={modAnswerQ} 
+          setPage={updatePage} 
+          setEntryId={setEntryId}
+          setEntryType={setEntryType}
+          sessionUser={sessionId}
+        />
+      )}
+
       {currentPage === "userPage" && (
         <UserPage 
           setEntryId={setEntryId}
@@ -158,6 +176,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           updatePage={updatePage}
           sessionUser={sessionId}
           setSessionUser={setSessionId}
+          setModifyAnswerQ={setModAnswerQ}
         />
       )}
 
@@ -166,6 +185,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           commentType={entryType}
           toId={entryId} 
           setPage={updatePage}
+          sessionUser={sessionId}
         />
       )}
     </div>
