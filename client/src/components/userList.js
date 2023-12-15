@@ -1,11 +1,8 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
-import QuestionsAnswered from '../helpers/questionsAnswered';
-import QuestionsAsked from '../helpers/questionsAsked';
-import TagsCreated from '../helpers/tagsCreated';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import formatQuestionMetadata from '../helpers/formatQuestionMetadata';
 
-const userList = ({ }) => {
+const UserList = ({ setPage, sessionUser, setChosenUser }) => {
   const [usersList, setUsersList] = useState([]);
 
   useEffect(() => {
@@ -13,40 +10,46 @@ const userList = ({ }) => {
       setUsersList([...res.data]);
     });
   }, []);
- async function deleteUser(user) {
-      const deleteUser = user.userId;
-      axios.delete(`http://localhost:8000/users/deleteUser/${deleteUser}`).then(async (res) => {
-            if (res.data === 'success') {
-              const updatedUsersList = usersList.filter((user) => user._id !== userToDelete);
-              setUsersList(updatedUsersList);
-            }
-            else{
-              
-            }
-          });
-        }
 
-    
+  async function deleteUser(userId) {
+    axios.delete(`http://localhost:8000/users/deleteUser/${userId}`).then(async (res) => {
+      if (res.data === 'success') {
+        const updatedUsersList = usersList.filter((user) => user._id !== userId);
+        setUsersList(updatedUsersList);
+      } else {
+        console.log("Unsuccessfully retrieved data");
+      }
+    });
+  }
+
+  async function goToUserPage(userId){
+    axios.get(`http://localhost:8000/users/getUserData/${userId}`).then(async (res) => {
+      const chosenUser = res.data;
+      setChosenUser(chosenUser);
+      console.log("Successfully heading to user page: ", chosenUser);
+      setPage('chosenUser');
+    });
+  }
+
   return (
     <div className='userDiv'>
-    {userList.map((user) => (
+      {usersList.map((user) => (
         <div key={user._id} className="flexDiv">
           <div className="user-container">
-              <h2
-                onClick={() => {
-                 setPage(); // set page to that user page
-                }}
-              >
-                {user._id === userSession.userId ? user.username + ' (User Account)' : user.username}
-              </h2>
-              <button disabled={user._id === userSession.userId} onClick={deleteUser}>
-                Delete
-              </button>
-            </div>
-  
+            <h2
+              onClick={() => goToUserPage(user._id)}
+            >
+              {user._id === sessionUser.userId ? user.username + ' (User Account)' : user.username}
+            </h2>
+            <button disabled={user._id === sessionUser.userId} onClick={() => deleteUser(user._id)}>
+              Delete
+            </button>
+          </div>
         </div>
-    ))}
-      </div>
-);}
+      ))}
+    </div>
+  );
+};
 
-export default UserList
+export default UserList;
+

@@ -12,6 +12,7 @@ const Fakestackoverflow = () => {
   const [currentQstnArray, setQstnArray] = useState([]);
   const [tagId, setTagId] = useState('');
   const [sessionUser, setSessionUser] = useState({loggedIn : false, admin : false});
+  const [chosenUser, setChosenUser] = useState(null);
 
   const updateTagId = (tagId) => {
     setTagId(tagId);
@@ -76,6 +77,8 @@ const Fakestackoverflow = () => {
                 setTagId={updateTagId}
                 sessionId={sessionUser}
                 setSessionId={setSessionUser}
+                chosenUser={chosenUser}
+                setChosenUser={setChosenUser}
                 />
         </div>
     </div>

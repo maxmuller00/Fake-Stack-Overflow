@@ -38,7 +38,7 @@ const SearchList = ({qarray, currentPage, setPage, currentQ, setCurrentQ, setQst
             <CreateTagForQuestion tagIds={question.tags} qid={question._id} />
           </div>
           <div className="askedByDiv">
-              <p>{question.asked_by} asked {formatQuestionMetadata(new Date(question.ask_date_time))}</p>
+              <p>{question.asked_by_name} asked {formatQuestionMetadata(new Date(question.ask_date_time))}</p>
           </div>
         </div>
     ))}

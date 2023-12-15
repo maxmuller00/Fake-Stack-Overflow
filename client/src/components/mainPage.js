@@ -15,9 +15,11 @@ import ModifyForm from "./modifyForm.js";
 import UserPage from "./userPage.js";
 import CommentForm from "./commentForm.js";
 import ModifyAnswerContainer from "./modifyAnswerContainer.js";
+import AdminPage from "./adminPage.js";
+import UserPageAdmin from "./userPageAdmin.js";
 import axios from 'axios';
 
-const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId}) => {
+const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnArray, setQstnArray, currentSearch, setCurrentSearch, tagId, setTagId, sessionId, setSessionId, chosenUser, setChosenUser}) => {
 
   async function getTagById(tag_Id) {
     const response = await axios.get(`http://localhost:8000/posts/tags/${tag_Id}`);
@@ -156,6 +158,7 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           entryId={entryId}
           type = {entryType}
           setPage={updatePage}
+          sessionUser={sessionId}
         />
       )}
 
@@ -188,6 +191,26 @@ const MainPage = ({currentPage, updatePage, currentQ, setCurrentQ, currentQstnAr
           sessionUser={sessionId}
         />
       )}
+
+      {currentPage === 'adminPage' && (
+        <AdminPage 
+          sessionUser={sessionId}
+          setPage={updatePage}
+          setChosenUser={setChosenUser}
+        />
+      )}
+
+      {currentPage === 'chosenUser' && (
+        <UserPageAdmin
+          chosenUser={chosenUser} 
+          setChosenUser={setChosenUser}
+          updatePage={updatePage}
+          setEntryId={setEntryId}
+          setEntryType={setEntryType} 
+          setModifyAnswerQ={setModAnswerQ}
+        />
+      )}
+
     </div>
   );
 };

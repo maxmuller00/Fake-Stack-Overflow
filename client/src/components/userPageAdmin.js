@@ -5,14 +5,14 @@ import QuestionsAsked from '../helpers/questionsAsked';
 import TagsCreated from '../helpers/tagsCreated';
 import formatQuestionMetadata from '../helpers/formatQuestionMetadata';
 
-const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntryType, setModifyAnswerQ }) => {
+const UserPageAdmin = ({ chosenUser, setChosenUser, updatePage, setEntryId, setEntryType, setModifyAnswerQ }) => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [userQuestions, setUserQuestions] = useState([]);
   const [userTags, setUserTags] = useState([]);
 
   const getUserQuestions = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/posts/questions/byUser/${sessionUser.userId}`);
+      const response = await axios.get(`http://localhost:8000/posts/questions/byUser/${chosenUser._id}`);
       setUserQuestions(response.data);
     } catch (error) {
       // Handle error
@@ -22,7 +22,7 @@ const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntr
 
   const getUserAnswers = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/posts/answers/getAnswered/${sessionUser.userId}`);
+      const response = await axios.get(`http://localhost:8000/posts/answers/getAnswered/${chosenUser._id}`);
       setUserAnswers(response.data);
     } catch (error) {
       // Handle error
@@ -32,7 +32,7 @@ const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntr
 
   const getUserTags = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/posts/tags/getUser/${sessionUser.userId}`);
+      const response = await axios.get(`http://localhost:8000/posts/tags/getUser/${chosenUser._id}`);
       setUserTags(response.data);
     } catch (error) {
       // Handle error
@@ -44,7 +44,7 @@ const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntr
     getUserQuestions();
     getUserAnswers();
     getUserTags();
-  }, [sessionUser.userId]); // Make sure to include dependencies if necessary
+  }, [chosenUser._id]); // Make sure to include dependencies if necessary
 
   const [currentView, setCurrentView] = useState(1);
 
@@ -54,10 +54,10 @@ const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntr
 
   return (
     <div>
-      <h1>{sessionUser.username}</h1>
-      <p>Reputation: {sessionUser.reputation}</p>
-      <p>Member since: {formatQuestionMetadata(new Date(sessionUser.created_at))}</p>
-      <button onClick={() => handleClick(2)}>Your Questions</button>
+      <h1>{chosenUser.username}</h1>
+      <p>Reputation: {chosenUser.reputation}</p>
+      <p>Member since: {formatQuestionMetadata(new Date(chosenUser.created_at))}</p>
+      <button onClick={() => handleClick(2)}>Questions Asked</button>
       <button onClick={() => handleClick(1)}>Questions Answered</button>
       <button onClick={() => handleClick(3)}>Tags Created</button>
       {currentView === 1 && (
@@ -71,15 +71,9 @@ const UserPage = ({ sessionUser, setSessionUser, updatePage, setEntryId, setEntr
           setEntryType={setEntryType}
         />
       )}
-      {currentView === 3 && <TagsCreated 
-      tags={userTags} 
-      setEntryId={setEntryId} 
-      setEntryType={setEntryType} 
-      setPage={updatePage}
-      />
-      }
+      {currentView === 3 && <TagsCreated tags={userTags} />}
     </div>
   );
 };
 
-export default UserPage;
+export default UserPageAdmin;

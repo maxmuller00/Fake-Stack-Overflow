@@ -26,8 +26,12 @@ const sidenav = ({currentPage, updatePage, currentQstnArray, setQstnArray, sessi
     <div className='sideNav'>
         <button className='questionSideNav' onClick={()=>handleClick('allQuestions')}>Questions</button>
         <button className='tagsSideNav' onClick={()=>updatePage('allTags')}>Tags</button>
-        {sessionUser.loggedIn === true && (
+        {sessionUser.loggedIn === true && !sessionUser.isAdmin && (
           <button className='userSideNav' onClick={()=>updatePage('userPage')}>{/*Grab username from session Id */}
+           {sessionUser.username}</button>
+        )}
+        {sessionUser.loggedIn === true && sessionUser.isAdmin && (
+          <button className='userSideNav' onClick={()=>updatePage('adminPage')}>{/*Grab username from session Id */}
            {sessionUser.username}</button>
         )}
         {sessionUser.loggedIn === true && (

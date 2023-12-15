@@ -115,6 +115,7 @@ router.get('/getUserData/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
     user.password = undefined;
+    console.log("USER ", user);
     res.send(user);
   } catch (err) {
     res.send('Internal Server Error occurred. Please try again.');

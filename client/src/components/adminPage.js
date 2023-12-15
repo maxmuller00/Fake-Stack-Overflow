@@ -1,22 +1,19 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
-import QuestionsAnswered from '../helpers/questionsAnswered';
-import QuestionsAsked from '../helpers/questionsAsked';
+import React from 'react';
 import UserList from './userList';
 import formatQuestionMetadata from '../helpers/formatQuestionMetadata';
 
-const adminPage = ({ }) => {
-  
-
-    
+const AdminPage = ({ sessionUser, setPage, setChosenUser }) => {
   return (
     <div>
-        <p>Member since: {formatQuestionMetadata(new Date(sessionUser.created_at))}</p>
-        <p>Reputation Score: {sessionUser.reputation}</p>
-        <UserList>
-  </div>
-     
-);
-}
+      <p>Member since: {formatQuestionMetadata(new Date(sessionUser.created_at))}</p>
+      <p>Reputation Score: {sessionUser.reputation}</p>
+      <UserList 
+        setPage={setPage}
+        sessionUser={sessionUser}
+        setChosenUser={setChosenUser}
+      />
+    </div>
+  );
+};
 
-export default AdminPage
+export default AdminPage;

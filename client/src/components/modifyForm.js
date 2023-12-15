@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ModifyForm = ({ entryId, type, setPage }) => {
+const ModifyForm = ({ entryId, type, setPage, sessionUser }) => {
   const [newText, setNewText] = useState('');
+  const [entry, setEntry] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -10,6 +11,7 @@ const ModifyForm = ({ entryId, type, setPage }) => {
         try {
           const response = await axios.get(`http://localhost:8000/posts/questions/${entryId}`);
           setNewText(response.data.text);
+          setEntry(response.data);
         } catch (error) {
           console.error('Error fetching question:', error);
         }
@@ -27,7 +29,7 @@ const ModifyForm = ({ entryId, type, setPage }) => {
       } else {
         try {
           const response = await axios.get(`http://localhost:8000/posts/tags/${entryId}`);
-          setNewText(response.data.text); // Assuming response contains text property
+          setNewText(response.data.name); // Assuming response contains text property
         } catch (error) {
           console.error('Error fetching tag:', error);
         }
@@ -47,13 +49,17 @@ const ModifyForm = ({ entryId, type, setPage }) => {
     e.preventDefault();
     try {
       if (type === 'Question') {
-        await axios.put(`http://localhost:8000/posts/questions/${entryId}`, { text: newText }, { withCredentials: true});
+        await axios.put(`http://localhost:8000/posts/questions/editQuestion/${entryId}`, { text: newText }, { withCredentials: true});
       } else if (type === 'Answer') {
-        await axios.put(`http://localhost:8000/posts/answers/${entryId}`, { text: newText }, { withCredentials: true});
+        await axios.put(`http://localhost:8000/posts/answers/editAnswer/${entryId}`, { text: newText }, { withCredentials: true});
       } else {
-        await axios.put(`http://localhost:8000/posts/tags/${entryId}`, { text: newText }, { withCredentials: true});
+        await axios.put(`http://localhost:8000/posts/tags/edit/${entryId}`, { name: newText }, { withCredentials: true});
       }
-      setPage('userPage');
+      if(sessionUser.isAdmin){
+        setPage('chosenUser');
+      }else{
+        setPage('userPage');
+      }
     } catch (error) {
       console.error('Error updating entry:', error);
     }
@@ -63,13 +69,17 @@ const ModifyForm = ({ entryId, type, setPage }) => {
     e.preventDefault();
     try {
       if (type === 'Question') {
-        await axios.delete(`http://localhost:8000/posts/questions/${entryId}`, { withCredentials: true});
+        await axios.delete(`http://localhost:8000/posts/questions/deleteQuestion/${entryId}`, { withCredentials: true});
       } else if (type === 'Answer') {
-        await axios.delete(`http://localhost:8000/posts/answers/${entryId}`, { withCredentials: true});
+        await axios.delete(`http://localhost:8000/posts/answers/deleteAnswer/${entryId}`, { withCredentials: true});
       } else {
-        await axios.delete(`http://localhost:8000/posts/tags/${entryId}`, { withCredentials: true});
+        await axios.delete(`http://localhost:8000/posts/tags/delete/${entryId}`, { withCredentials: true});
       }
-      setPage('userPage');
+      if(sessionUser.isAdmin){
+        setPage('chosenUser');
+      }else{
+        setPage('userPage');
+      }
     } catch (error) {
       console.error('Error deleting entry:', error);
     }

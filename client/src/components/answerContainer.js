@@ -28,7 +28,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
     const [upVotedAnswers, setUpVotedAnswers] = useState([]);
     const [downVotedAnswers, setDownVotedAnswers] = useState([]);
     const [votedComments, setVotedComments] = useState([]);
-    const answersPerPage = 3;
+    const answersPerPage = 5;
 
     useEffect(() => {
           axios.get(`http://localhost:8000/posts/answers/getAnswersForQuestion/${currentQuestion._id}`)
@@ -99,7 +99,7 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
     fetchComments();
   }, [currentAnswers]);
 
-  if(answerArray.lenth === 0){
+  if(answerArray.length === 0){
     return (
       <div></div>
     )
@@ -176,29 +176,30 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
   return (
     <div>
       {currentAnswers.map((ans_Id) => (
-        <div key={ans_Id._id} className="flexDiv">
-          <div className="textDiv2">
-            <p>{extractLink(ans_Id.text)}</p>
-          </div>
-          <div className="answeredByDiv">
-            <p>
-              {ans_Id.ans_by_name} answered on{' '}
-              {formatQuestionMetadata(new Date(ans_Id.ans_date_time))}
-            </p>
-            {/* Display vote count for the answer */}
-            <span>Votes: {ans_Id.votes}</span>
-          </div>
-          {sessionId.loggedIn &&(
-            <div key={ans_Id._id+"comment"}className="commentButtonDiv">
-              <button onClick={() => handleComment(ans_Id._id, 'answer')}> Comment </button>
+        <div>
+          <div key={ans_Id._id} className="flexDiv">
+            <div className="textDiv2">
+              <p>{extractLink(ans_Id.text)}</p>
             </div>
-          )}
-          {/* Upvote and Downvote buttons for answers */}
-          {sessionId.loggedIn && (<div className="voteButtons">
-            <button onClick={() => handleUpvoteAnswer(ans_Id._id)} disabled={upVotedAnswers.includes(ans_Id._id)}>Upvote Answer</button>
-            <button onClick={() => handleDownvoteAnswer(ans_Id._id)} disabled={downVotedAnswers.includes(ans_Id._id)}>Downvote Answer</button>
-          </div>)}
-          {/* Display comments for the current answer */}
+            <div className="answeredByDiv">
+              <p>
+                {ans_Id.ans_by_name} answered on{' '}
+                {formatQuestionMetadata(new Date(ans_Id.ans_date_time))}
+              </p>
+              {/* Display vote count for the answer */}
+              <span>Votes: {ans_Id.votes}</span>
+            </div>
+            {sessionId.loggedIn &&(
+              <div key={ans_Id._id+"comment"}className="commentButtonDiv">
+                <button onClick={() => handleComment(ans_Id._id, 'answer')}> Comment </button>
+              </div>
+            )}
+            {/* Upvote and Downvote buttons for answers */}
+            {sessionId.loggedIn && (<div className="voteButtons">
+              <button onClick={() => handleUpvoteAnswer(ans_Id._id)} disabled={upVotedAnswers.includes(ans_Id._id)}>Upvote Answer</button>
+              <button onClick={() => handleDownvoteAnswer(ans_Id._id)} disabled={downVotedAnswers.includes(ans_Id._id)}>Downvote Answer</button>
+            </div>)}
+          </div>
           <div className="commentContainer">
             {comments
               .find((commentObj) => commentObj.ansId === ans_Id._id)
@@ -212,6 +213,8 @@ function AnswerContainer({currentQuestion, setEntryId, setEntryType, setPage, se
                       {comment.com_by_name} answered on{' '}
                       {formatQuestionMetadata(new Date(comment.com_date_time))}
                     </p>
+                    {sessionId.loggedIn && <button>Upvote</button>}
+                    <span>Votes: {comment.votes}</span>
                   </div>
                 </div>
               ))}
