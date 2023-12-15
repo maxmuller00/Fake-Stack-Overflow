@@ -29,6 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+
 router.get('/:ans_id', async (req, res) => {
     const ans_id = req.params.ans_id;
     try {
@@ -39,6 +40,7 @@ router.get('/:ans_id', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+
 
   router.get('/getAnswered/:user_id', async (req, res) => {
     try {
@@ -80,6 +82,16 @@ router.get('/:ans_id', async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });
+router.get('/getAnswered/:user_id', async (req, res) => {
+  try {
+    const answersByUser = await Answers.find({ ans_by: req.params.user_id }).exec();
+    const questions = await Questions.find({ answers: { $in: answersByUser } }).sort({ ask_date_time: -1 });
+    res.send(questions);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
   router.patch('/incrementVotes/:answer/:userVoted', async (req, res) => {
     console.log("TEST1");

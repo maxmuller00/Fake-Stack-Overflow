@@ -96,14 +96,32 @@ const keywords = [
   'Testing',
   'Debugging',
   'Agile',
-  'UI/UX',
   'Design',
   'CSE316',
   'React',
   'Webpack',
   'MongoDB',
   'SQL',
-  
+  'Midterm',
+  'Final Project',
+  'Java',
+  'Algorithm', 
+  'Data Structures', 
+  'Programming', 
+  'Variables', 
+  'Functions', 
+  'Looping', 
+  'Sorting', 
+  'Database', 
+  'Authentication', 
+  'Web Development', 
+  'Object-Oriented',
+  'Error Handling', 
+  'Networking', 
+  'GUI (Graphical User Interface)', 
+  'Conditional Statements', 
+  'Software Testing', 
+  'User Interface',
 ];
 const randomIndex = (list) => Math.floor(Math.random() * list.length);
 const randomWord = (li) => li[randomIndex(li)];
@@ -193,7 +211,7 @@ const populate = async () => {
 
   const questions = [];
   for (let i = 1; i <= 5; i++) {
-    const title = `Question ${i}: ${randomWord(keywords)} ${randomWord(keywords)} `;
+    const title = `${randomWord(keywords)} ${randomWord(keywords)} `;
     const summary = `Summary of question ${i} ${randomWord(keywords)}`;
     const text = `Text of question ${i} ${randomWord(keywords)} ${randomWord(keywords)} ${randomWord(keywords)}`;
     const tags_1 = randomUniqueTags();
